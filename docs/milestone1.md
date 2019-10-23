@@ -50,6 +50,7 @@ obj2 = AD(f)
 .\docs  
 <p>\base   
 <p> \utils  
+
 .\funkyAD  
 <p> \tests  
 <p> \base  
@@ -92,26 +93,23 @@ outputNodelist
 eval\_trace   
 graph   
 
-**class Node():**
-class InputNode(Node):
+**class Node():**    
+class InputNode(Node):   
 class OutputNode(Node): 
 
-*Methods:*
-
+*Methods:*   
 \_\_add\_\_  (\_\_radd\_\_)   
 \_\_mult\_\_ (\_\_mult\_\_)   
 previous()  
 next()  
 
-*Attributes:*
-
-val
+*Attributes:*   
+val   
 gradient\_val
  
-\# handle derivates of elementary functions (e.g. sin, sqrt)
-**class ElementaryFunction():**  
-
-function and its derivative  
+\# handle derivates of elementary functions (e.g. sin, sqrt)   
+**class ElementaryFunction():**   
+function and its derivative   
 ninputs  
 noutputs  
 add\_function()
