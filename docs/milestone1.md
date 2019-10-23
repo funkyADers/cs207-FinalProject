@@ -2,7 +2,7 @@
 ### Project Group 4
 
 ## Introduction
-Differentiation is used in 
+Differentiation  
 
 ## Background
 How AD works
@@ -10,10 +10,9 @@ How AD works
 ## How to Use funkyAD
 
 The software funkyAD is a software package that includes 3 important classes: AD, Node, and Elementary Function.
-The user will interact with the AD class, which performs autodifferentaiotn 
+The user will interact with the AD class to differentiate a specified function using automatic differentiation. 
 
 Pseudocode on how to interact with funkyAD shown below: 
-
 ```
 from funkyAD import AD
 
@@ -49,21 +48,28 @@ obj2 = AD(f)
 
 #### Directory Structure: 
 .\docs
+
     \base 
+
     \utils
+
 .\funkyAD
+
     \tests
+
     \base
+
     \utils
+
 .\examples
 
 #### Modules (functionality)
 forward - forward diffferentiation AD, give function as an argument and return
-backward - backward differentation AD
+
+(optional) backward - backward differentation AD
 
 #### Test suite
-Our test suite will live with \funkyAD
-TravisCI, CodeCov, and both doctests and unittests
+Our test suite will live within \funkyAD. We plan to use TravisCI, CodeCov, doctests and unittests for testing. 
 
 #### Distribution
 PyPI  
@@ -73,45 +79,67 @@ Follow the guidelines of the tutorial
 
 ## Implementation
 
-\bold{class AD():}
+__class AD():__
 
 Methods: 
+
 def __init__():
+
 def __buildgraph__():
+
 def gradient(forward):
+
 def createnodes():
+
 def set_seed():
+
 def get_seed(): 
+
 def eval_trace: return evaluation trace
-ddef print_graph: return the evaluation graph 
+
+def print_graph: return the evaluation graph 
 
 Attributes: 
+
 inputNodeList
+
 outputNodelist
+
 eval_trace
+
 graph
 
-\bold{class Node():}
-\bold{class InputNode(Node):}
-\bold{class OutputNode(Node): }
+__class Node():__
+class InputNode(Node):
+class OutputNode(Node): 
 
 Methods:
- __add__  (__radd__)
- __mult__ (__mult__)
- previous()
- next()
+
+__add__  (__radd__)
+
+__mult__ (__mult__)
+
+previous()
+
+next()
  
- Attributes:
+Attributes:
+
  val
+
  gradient_val
  
 
 # handle derivates of elementary functions (e.g. sin, sqrt)
-\bold{class ElementaryFunction(): }
- function and its derivative
- n_inputs
- n_outputs
- add_function()
+__class ElementaryFunction():__
+
+function and its derivative
+
+ninputs
+
+noutputs
+
+add_function()
 
 
 External dependencies: numpy, doctest, unitest, pytest 
