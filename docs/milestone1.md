@@ -73,6 +73,12 @@ We will distribute the package with PyPI.
 In funkyAD we define 3 main classes: AD, Node, and Elementary Function. AD is the class that the user will interact with. It takes in a function from the user and calls the necessary functions and classes in order to calculate the gradient. The Node class is essentially a row in our trace table, it has subclasses for input nodes (InputNode) and output nodes (OutputNodes). Nodes are connected and can be added or multiplied together to form new nodes, via the dunder methods\_\_add\_\_ etc, which allows us to build up the trace table. The Elementary Class defines the functions and derivatives of elementary functions passed in by the user, such as sin, log, etc. We also allow the user to add their own elementary function to the list if we do not include the elementary function they need in the initial library list.  
 
 ```
+# External dependencies
+import numpy
+import doctest
+import unitest
+import pytest
+
 # the AD class instigates the differentation process and stores all output values
 class AD():
 
@@ -94,7 +100,7 @@ outputNodelist: the list of outputs
 eval_trace: the evaluation trace   
 graph: the evaluation graph 
 
-# The node class finds 
+# Node classes and subclasses 
 class Node(): the node class stores relevant information for each node in the graph
 class InputNode(Node): a subclass of the Node class
 class OutputNode(Node): a subclass of the Node class
@@ -123,8 +129,8 @@ noutputs: number of outputs
 
 ```
 
-We will rely on the following external dependencies: numpy, doctest, unitest, pytest 
-
+**OUTSTANDING**
+We never talked about dual numbers? Should we use these to store the function and its derivative?
 
 How do we deal with arrays ?? 
  linked-list
