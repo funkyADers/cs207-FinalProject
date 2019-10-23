@@ -47,21 +47,14 @@ obj2 = AD(f)
 ## Software Organization
 
 #### Directory Structure: 
-.\docs
-
-    \base 
-
-    \utils
-
-.\funkyAD
-
-    \tests
-
-    \base
-
-    \utils
-
-.\examples
+.\docs  
+    \base   
+    \utils  
+.\funkyAD  
+    \tests  
+    \base  
+    \utils  
+.\examples   
 
 #### Modules (functionality)
 forward - forward diffferentiation AD, give function as an argument and return
@@ -79,70 +72,51 @@ Follow the guidelines of the tutorial
 
 ## Implementation
 
-__class AD():__
+**class AD():**
 
-Methods: 
+*Methods:*
+ 
+def __init__():  
+def __buildgraph__():  
+def gradient(forward):  
+def createnodes():  
+def set_seed():  
+def get_seed():   
+def eval_trace: return evaluation trace  
+def print_graph: return the evaluation graph   
 
-def __init__():
+*Attributes:* 
 
-def __buildgraph__():
+inputNodeList   
+outputNodelist   
+eval_trace   
+graph   
 
-def gradient(forward):
-
-def createnodes():
-
-def set_seed():
-
-def get_seed(): 
-
-def eval_trace: return evaluation trace
-
-def print_graph: return the evaluation graph 
-
-Attributes: 
-
-inputNodeList
-
-outputNodelist
-
-eval_trace
-
-graph
-
-__class Node():__
+**class Node():**
 class InputNode(Node):
 class OutputNode(Node): 
 
-Methods:
+*Methods:*
 
-__add__  (__radd__)
+__add__  (__radd__)   
+__mult__ (__mult__)   
+previous()  
+next()  
 
-__mult__ (__mult__)
+*Attributes:*
 
-previous()
-
-next()
+val
+gradient_val
  
-Attributes:
-
- val
-
- gradient_val
- 
-
 # handle derivates of elementary functions (e.g. sin, sqrt)
-__class ElementaryFunction():__
+**class ElementaryFunction():**  
 
-function and its derivative
-
-ninputs
-
-noutputs
-
+function and its derivative  
+ninputs  
+noutputs  
 add_function()
 
-
-External dependencies: numpy, doctest, unitest, pytest 
+*External dependencies:* numpy, doctest, unitest, pytest 
 
 How do we deal with arrays ?? 
  linked-list
