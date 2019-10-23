@@ -4,7 +4,7 @@
 Differentiation is used in many applications, such as fining stationary points of defined functions or minimizing objective loss functions in machine learning applications. Automatic differentiation (AD) has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
  
 ## Background
-So how does AD do it? AD takes an input functions and breaks it down into a set elementary functions combined using common mathematical functions, such as addition or multiplication. Then, leveraging the magic of the chain rule, we can calclulate the function's derivatives by calculating the partial derivatives. There are two common methods for implementing AD, forward AD and backward AD (or backpropagation). 
+So how does AD do it? AD takes an input functions and breaks it down into a set elementary functions combined using common mathematical functions, such as addition or multiplication. Then, leveraging the magic of the chain rule, the function's derivatives are calculated using the partial derivatives. There are two common methods for implementing AD, forward AD and backward AD (or backpropagation). 
 
 ## How to Use funkyAD
 
@@ -70,51 +70,61 @@ We will distribute the package with PyPI.
 
 ## Implementation
 
-In funkyAD we define 3 main classes: AD, Node, and Elementary Function. AD the class that the user will interact with. It takes in a function from the user and calls the necessary functions and classes in order to calculate the gradient. The Node class is essentially a row in our trace table, it has subclasses for input nodes (InputNode) and output nodes (OutputNodes). Nodes are connected and can be added or multiplied together to form new nodes, via the dunder methods __add__ etc. The Elementary Class allows us to define the functions and derivatives of elementary functions passed in by the user, such as sign, log, etc. We also allow the user to add their own elementary function to the list if we do not include the elementary function they need in the initial library list.  
+In funkyAD we define 3 main classes: AD, Node, and Elementary Function. AD is the class that the user will interact with. It takes in a function from the user and calls the necessary functions and classes in order to calculate the gradient. The Node class is essentially a row in our trace table, it has subclasses for input nodes (InputNode) and output nodes (OutputNodes). Nodes are connected and can be added or multiplied together to form new nodes, via the dunder methods\_\_add\_\_ etc, which allows us to build up the trace table. The Elementary Class defines the functions and derivatives of elementary functions passed in by the user, such as sin, log, etc. We also allow the user to add their own elementary function to the list if we do not include the elementary function they need in the initial library list.  
 
 ```
-**class AD():**
+# the AD class instigates the differentation process and stores all output values
+class AD():
 
-*Methods:*
+Methods:
  
-def \_\_init\_\_():  
-def \_\_buildgraph\_\_():  
-def gradient(forward):  
-def createnodes():  
-def set\_seed():  
-def get\_seed():   
-def eval\_trace: return evaluation trace  
-def print\_graph: return the evaluation graph   
+def __init__(): initialize AD object 
+def __buildgraph__(): build the evaluation graph
+def gradient(forward): run forward AD, allows for option for backward AD if implemented
+def createnodes(): create notes for the evaluation trace
+def set_seed(): set the seed
+def get_seed(): return the seed
+def eval_trace: return evaluation trace  
+def print_graph: return the evaluation graph   
 
-*Attributes:* 
+Attributes: 
 
-inputNodeList   
-outputNodelist   
-eval\_trace   
-graph   
+inputNodeList: the list of inputs
+outputNodelist: the list of outputs
+eval_trace: the evaluation trace   
+graph: the evaluation graph 
 
-**class Node():**    
-class InputNode(Node):   
-class OutputNode(Node): 
+# The node class finds 
+class Node(): the node class stores relevant information for each node in the graph
+class InputNode(Node): a subclass of the Node class
+class OutputNode(Node): a subclass of the Node class
 
-*Methods:*   
-\_\_add\_\_  (\_\_radd\_\_)   
-\_\_mult\_\_ (\_\_rmult\_\_)   
-previous()  
-next()  
+Methods:
+__add__  (__radd__): add two nodes
+__mult__ (__rmult__): multiple two nodes
+previous(): find previous node
+next(): get next node
 
-*Attributes:*   
-val   
-gradient\_val
- 
-**class ElementaryFunction():**   
-function and its derivative   
-ninputs  
-noutputs  
-add\_function()
+Attributes:   
+val: the value of the node   
+gradient_val: the gradient of the node
+SHOULD THIS BE STORED AS A DUAL NUMBER?
 
-*External dependencies:* numpy, doctest, unitest, pytest 
+# The Elementary Function stores elementary functions and their derivatives
+class ElementaryFunction(): 
+
+Methods:
+add_function(): allows the user to add a new elementary function and derivative
+
+Attributes: 
+ninputs: number of inputs  
+noutputs: number of outputs 
+
+
 ```
+
+We will rely on the following external dependencies: numpy, doctest, unitest, pytest 
+
 
 How do we deal with arrays ?? 
  linked-list
