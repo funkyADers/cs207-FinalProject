@@ -48,12 +48,12 @@ obj2 = AD(f)
 
 #### Directory Structure: 
 .\docs  
-    \base   
-    \utils  
+<p>\base   
+<p> \utils  
 .\funkyAD  
-    \tests  
-    \base  
-    \utils  
+<p> \tests  
+<p> \base  
+<p> \utils  
 .\examples   
 
 #### Modules (functionality)
@@ -76,20 +76,20 @@ Follow the guidelines of the tutorial
 
 *Methods:*
  
-def __init__():  
-def __buildgraph__():  
+def \_\_init\_\_():  
+def \_\_buildgraph\_\_():  
 def gradient(forward):  
 def createnodes():  
-def set_seed():  
-def get_seed():   
-def eval_trace: return evaluation trace  
-def print_graph: return the evaluation graph   
+def set\_seed():  
+def get\_seed():   
+def eval\_trace: return evaluation trace  
+def print\_graph: return the evaluation graph   
 
 *Attributes:* 
 
 inputNodeList   
 outputNodelist   
-eval_trace   
+eval\_trace   
 graph   
 
 **class Node():**
@@ -98,23 +98,23 @@ class OutputNode(Node):
 
 *Methods:*
 
-__add__  (__radd__)   
-__mult__ (__mult__)   
+\_\_add\_\_  (\_\_radd\_\_)   
+\_\_mult\_\_ (\_\_mult\_\_)   
 previous()  
 next()  
 
 *Attributes:*
 
 val
-gradient_val
+gradient\_val
  
-# handle derivates of elementary functions (e.g. sin, sqrt)
+\# handle derivates of elementary functions (e.g. sin, sqrt)
 **class ElementaryFunction():**  
 
 function and its derivative  
 ninputs  
 noutputs  
-add_function()
+add\_function()
 
 *External dependencies:* numpy, doctest, unitest, pytest 
 
