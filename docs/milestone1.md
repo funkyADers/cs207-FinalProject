@@ -136,3 +136,4 @@ How do we deal with arrays ??
  linked-list
  graph class? 
  What if we iterate through the list? and AD each in parallel? 
+
