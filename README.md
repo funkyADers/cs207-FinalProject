@@ -7,7 +7,7 @@ CS207 final project
 
 
 Group no. 4
-Anna Zynk
-Johannes Kolberg
+Anna Zink
+Johannes K. Kolberg
 Fabio Pruneri
 Tyler Yoo

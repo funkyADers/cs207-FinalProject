@@ -1,18 +1,20 @@
 # Milestone1
 
 ## Introduction
-Differentiation is used in many applications, such as fining stationary points of defined functions or minimizing objective loss functions in machine learning applications. But differentiating an arbitrary function $\mathbb{R}^n \rightarrow \mathbb{R}^m$ is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
+Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. But differentiating an arbitrary function $\mathbb{R}^n \rightarrow \mathbb{R}^m$ is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
  
 ## Background
-So how does AD do it? AD takes an input functions and breaks it down into a set elementary functions combined using common mathematical functions, such as addition or multiplication. Then, leveraging the magic of the chain rule, the function's derivatives are calculated using the partial derivatives. Basically you compute an evaluation trace (which can be stored in either a table or a graph), where at each intermediate step of the computation you store the current value(s) of the intermediate variables and their derivatives w.r.t. some input seed vectors. 
+So how does AD do it? AD takes an input functions and breaks it down into a set of elementary functions combined using common mathematical functions, such as addition or multiplication. Then, leveraging the magic of the chain rule, the function's derivatives are calculated using the partial derivatives w.r.t. the inputs. Basically you compute an evaluation trace (which can be stored in either a table or a graph), where at each intermediate step of the computation you store the current value(s) of the intermediate variables and their derivatives w.r.t. some input seed vectors. 
 
 As an example, if you want to compute the derivative of $\sin(\tan(xy) + \cos(x + y))$ you can first compute the derivatives w.r.t $x,y$ of $\tan(xy)$ and $\cos(x + y)$, then add those together, and then get the derivative of the entire function using the chain rule. This is not done symbolically, but rather numerically, for every given input.
 
-There are two common methods for implementing AD, forward AD and backward AD (or backpropagation), which differ in efficiency based on the dimension of input/outputs. 
+There are two common methods for implementing AD, forward AD and backward AD (of which the popular backpropagation algorithm for neural networks is a special case), which differ in efficiency based on the dimension of input/outputs. 
 
 ## How to Use funkyAD
 
-The software funkyAD is a software package, that the user will interact with using the AD class. This AD class allows the user to differentiate a specified function by wrapping it into an AD object, automatically differentiate it, access the results and inspect the intermediate steps (if desired).
+The software funkyAD is a software package that the user will interact with using the AD class. This AD class allows the user to differentiate a specified function by wrapping it into an AD object, automatically differentiate it, access the results and inspect the intermediate steps (if desired).
+
+The package is intended for use by developers on personal computers, as a building block on top of which other functionality may be developed and depend.
 
 Pseudocode on how to interact with funkyAD shown below: 
 ```
@@ -77,10 +79,12 @@ We plan to write extensive and detailed docstrings for all function that will be
 We plan to use unittests for most of our testing (dottests only occasionally). We aim for as much code coverage as possible, and specifically target Exception raising and handling of edge cases.
 
 #### Distribution
-We will distribute the package with PyPI. We will follow the guidelines and instruction in the official Python documentation. The end user should be able to pip install our package.
+The funkyAD package will be distributed with PyPI. Consequently, users will be able to install the package using the uniquitous pip package manager. It will follow the guidelines and instructions in the official Python documentation.
 
 #### Software packaging: 
 According to common practice, we will include \_\_init\_\_.py files and setup.py so that automated tools can install and set up the library properly. We will choose transparent file names so that import statements are intuitive to the end user.
+
+It will be packaged as a Wheel for fast and easy installation.
 
 ## Implementation
 
