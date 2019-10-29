@@ -1,8 +1,9 @@
-# Milestone1
+# Milestone 1
 
 ## Introduction
 Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. 
-But differentiating an arbitrary function &#8477; <sup>n</sup> &#8594; &#8477; <sup>m</sup> is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. 
+But differentiating an arbitrary function &#8477;<sup>n</sup> &#8594; &#8477;<sup>m</sup> is generally not an easy task. 
+When the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation (AD) can help. 
 AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
  
 ## Background
@@ -16,7 +17,7 @@ There are two common methods for implementing AD, forward AD and backward AD (of
 
 The software funkyAD is a software package that the user will interact with using the AD class. This AD class allows the user to differentiate a specified function by wrapping it into an AD object, automatically differentiate it, access the results and inspect the intermediate steps (if desired).
 
-The package is intended for use by developers on personal computers, as a building block on top of which other functionality may be developed and depend.
+The package is intended for use by developers on personal computers, as a building block on top of which other functionality may be developed.
 
 Pseudocode on how to interact with funkyAD shown below: 
 ```
@@ -75,15 +76,14 @@ can return any of the following: the derivative, the derivative evaluated at a g
 
 #### Test suite
 Our test suite will live within the funkyAD directory. We plan to use TravisCI, CodeCov, doctests and unittests for testing. 
-
-We plan to write extensive and detailed docstrings for all function that will be accessible to the user, and replicate those in a nicer format in the corresponding docs folder (e.g. the file /funkyAD/AD.py will have its docs in /funkyAD/AD.html). A nice collection of examples for installation and usage will hopefully help the user in getting a working knowledge of the library quickly.
-
 We plan to use unittests for most of our testing (dottests only occasionally). We aim for as much code coverage as possible, and specifically target Exception raising and handling of edge cases.
 
-#### Distribution
-The funkyAD package will be distributed with PyPI. Consequently, users will be able to install the package using the uniquitous pip package manager. It will follow the guidelines and instructions in the official Python documentation.
+We plan to write extensive and detailed docstrings for all functions that will be accessible to the user, and replicate those in a nicer format in the corresponding docs folder (e.g. the file /funkyAD/AD.py will have its docs in /funkyAD/AD.html). A nice collection of examples for installation and usage will hopefully help the user in getting a working knowledge of the library quickly.
 
-#### Software packaging: 
+#### Distribution
+The funkyAD package will be distributed with PyPI. Consequently, users will be able to install the package using the ubiquitous pip package manager. It will follow the guidelines and instructions in the official Python documentation.
+
+#### Software packaging 
 According to common practice, we will include \_\_init\_\_.py files and setup.py so that automated tools can install and set up the library properly. We will choose transparent file names so that import statements are intuitive to the end user.
 
 It will be packaged as a Wheel for fast and easy installation.
