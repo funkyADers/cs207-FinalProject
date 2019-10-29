@@ -1,12 +1,12 @@
 # Milestone1
 
 ## Introduction
-Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. But differentiating an arbitrary function &#8477<sup>n</sup> &rarr &#8477<sup>m</sup> is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
+Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. But differentiating an arbitrary function <&#8477><sup>n</sup> <&rarr> <&#8477><sup>m</sup> is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
  
 ## Background
 So how does AD do it? AD takes an input functions and breaks it down into a set of elementary functions combined using common mathematical functions, such as addition or multiplication. Then, leveraging the magic of the chain rule, the function's derivatives are calculated using the partial derivatives w.r.t. the inputs. Basically you compute an evaluation trace (which can be stored in either a table or a graph), where at each intermediate step of the computation you store the current value(s) of the intermediate variables and their derivatives w.r.t. some input seed vectors. 
 
-As an example, if you want to compute the derivative of *sin(tan(xy) + cos(x + y))* you can first compute the derivatives w.r.t *x,y* of *tan(xy)* and *cos(x + y)*, then add those together, and then get the derivative of the entire function using the chain rule. This is not done symbolically, but rather numerically, for every given input.
+As an example, if you want to compute the derivative of *sin(tan(xy) + cos(x + y))* you can first compute the derivatives w.r.t *x* and *y* of *tan(xy)* and *cos(x + y)*, then add those together, and then get the derivative of the entire function using the chain rule. This is not done symbolically, but rather numerically, for every given input.
 
 There are two common methods for implementing AD, forward AD and backward AD (of which the popular backpropagation algorithm for neural networks is a special case), which differ in efficiency based on the dimension of input/outputs. 
 
@@ -90,7 +90,7 @@ It will be packaged as a Wheel for fast and easy installation.
 
 In funkyAD we define 3 main classes: AD, Node, and ElementaryFunction. AD is the class that the user will interact with. It takes in an arbitrary function from the user and calls the necessary functions and classes in order to calculate the gradient. It will have transparently named methods and syntactic sugar when appropriate. The user should not know how anything else in the library works for simple usage.
 
-The Node class is essentially a row in our trace table, it has subclasses for input nodes (InputNode) and output nodes (OutputNodes). Nodes are connected and can be added or multiplied together to form new nodes, via the dunder methods\_\_add\_\_ etc, which allows us to build up the trace table. A Node is, essentially, an extension of the Box class in HW4. If the user has defined a function f, we will call f(InputNode(input)) and the successive operation performed on that node will allow us to recover the evaluation trace.
+The Node class is essentially a row in our trace table, it has subclasses for input nodes (InputNode) and output nodes (OutputNodes). Nodes are connected and can be added or multiplied together to form new nodes, via the dunder methods\_\_add\_\_ etc, which allows us to build up the trace table. Dual numbers are essentially encoded as the pair (Node.val, Node.grad_val) in our implementation, and additions/operation are performed when calling ElementaryFunction(Node1, Node2). A Node is, essentially, an extension of the Box class in HW4. If the user has defined a function f, we will call f(InputNode(input)) and the successive operation performed on that node will allow us to recover the evaluation trace.
 
 The ElementaryFunction Class defines the functions and derivatives of elementary functions passed in by the user, such as sin, log, etc. We also allow the user to add their own elementary function to the list if we do not include the elementary function they need in the initial library list. An appropriate exception is raised if the user tries to utilize a function that is not defined as an instance of the ElementaryFunction class.
 
@@ -158,6 +158,4 @@ noutputs: number of outputs
 ```
 
 **OUTSTANDING**
-Dual numbers are essentially encoded as the pair (Node.val, Node.grad_val) in our implementation, and additions/operation are performed when calling ElementaryFunction(Node1, Node2).
-
-At this point we do not know how to deal with arbitrary-length arrays. One option might be to subclass np.array so it includes the functionalities we need. Another option is to have the user declare the length of the array they are passing to the function so we can create an appropriate amount of InputNodes and OutputNodes.
+At this point we are still considering how to deal with arbitrary-length arrays. One option might be to subclass np.array so it includes the functionalities we need. Another option is to have the user declare the length of the array they are passing to the function so we can create an appropriate amount of InputNodes and OutputNodes.
