@@ -1,12 +1,12 @@
 # Milestone1
 
 ## Introduction
-Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. But differentiating an arbitrary function $\R^n \rightarrow \R^m$ is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
+Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. But differentiating an arbitrary function &#8477<sup>n</sup> &rarr &#8477<sup>m</sup> is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
  
 ## Background
 So how does AD do it? AD takes an input functions and breaks it down into a set of elementary functions combined using common mathematical functions, such as addition or multiplication. Then, leveraging the magic of the chain rule, the function's derivatives are calculated using the partial derivatives w.r.t. the inputs. Basically you compute an evaluation trace (which can be stored in either a table or a graph), where at each intermediate step of the computation you store the current value(s) of the intermediate variables and their derivatives w.r.t. some input seed vectors. 
 
-As an example, if you want to compute the derivative of $\sin(\tan(xy) + \cos(x + y))$ you can first compute the derivatives w.r.t $x,y$ of $\tan(xy)$ and $\cos(x + y)$, then add those together, and then get the derivative of the entire function using the chain rule. This is not done symbolically, but rather numerically, for every given input.
+As an example, if you want to compute the derivative of *sin(tan(xy) + cos(x + y))* you can first compute the derivatives w.r.t *x,y* of *tan(xy)* and *cos(x + y)*, then add those together, and then get the derivative of the entire function using the chain rule. This is not done symbolically, but rather numerically, for every given input.
 
 There are two common methods for implementing AD, forward AD and backward AD (of which the popular backpropagation algorithm for neural networks is a special case), which differ in efficiency based on the dimension of input/outputs. 
 
