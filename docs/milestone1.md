@@ -2,7 +2,7 @@
 
 ## Introduction
 Differentiation is used in many applications, such as finding stationary points of defined functions or minimizing objective loss functions in machine learning applications. 
-But differentiating an arbitrary function `<html><&#8477><sup>n</sup> <&rarr> <&#8477><sup>m</sup>` is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. 
+But differentiating an arbitrary function &#8477<sup>n</sup> &#8594 &#8477<sup>m</sup> is generally not an easy task. In case the function can be expressed as a composition of differentiable elementary functions (which in most cases is true), Automatic Differentiation can help. 
 AD has become one of the most popular techniques for finding derivatives and is often preferred over symbolic differentation and numerical differentiation because of its efficiency and stability.
  
 ## Background
