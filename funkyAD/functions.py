@@ -24,5 +24,3 @@ multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x
 power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
 exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 
-
-#multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
