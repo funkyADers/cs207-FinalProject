@@ -2,6 +2,20 @@ from base import Node
 import numpy as np
 
 class BaseFunction():
+    '''Defines a function that can be used on Node objects and propagate the partial derivatives
+
+    BaseFunction(function, derivative)
+
+    - function: function with n Node arguments and m Node outputs. Can use any operation between integers,
+        including computations perfomed by secondary libraries (e.g. numpy).
+    - derivative: function that (symbolically or numerically) evaluates the derivative of the
+        given function. Takes Node objects as input/output. Again, can use secondary library functions.
+
+    BaseFunction(f, d)(Node(5, 4), Node(2, 6)):
+        equals: Node(f(Node(5, 4), Node(2, 6)), d(Node(5, 4), Node(2, 6)))
+
+    Returns a Node object by applying the specified function and the specified derivative.
+    '''
 
     def __init__(self, function, derivative):
         self.f = function
