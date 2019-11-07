@@ -4,14 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="funkyAD-pkg-funkyADers", 
+    name="funkyAD-funkyADers", 
     version="0.0.1",
-    author="Example Author",
-    author_email="author@example.com",
-    description="A small example package",
+    author="Anna Zink, Johannes K. Kolberg, Fabio Pruneri, Tyler Yoo",
+    author_email="",
+    description="An implementation of Auto Differentiaion",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/funkyADers/cs207-FinalProject",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
