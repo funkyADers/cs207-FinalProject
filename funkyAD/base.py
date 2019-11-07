@@ -2,6 +2,27 @@ import numpy as np
 
 
 class AD():
+    '''Wraps a function to access Automatic Differentiation methods.
+
+    AD(lambda x, y: x ** 2 - y)
+    -   creates an AD object that wraps a speficied function. Function can be given in
+        extended form (using def f(...)) or short (using lambdas, as above). 
+        Function cantake an arbitrary number of inputs by passing several arguments, 
+        or an iterable (list or np.array) containing the argument. The number of inputs 
+        can vary each time the function is called.
+        Function can return an arbitrary number of outputs as an iterable. The number of 
+        outputs can vary from call to call depending on input.
+        Function can use any of the standard arithmetic operators, or BaseFunctions. Most
+        of these are already defined for you in the module functions.py.
+
+    Sample usage:
+    >>> from base import AD
+    >>> from functions import exp
+    >>> def f(x):
+            return exp(x)
+    >>> print(AD(f).grad(0))
+    1
+    '''
 
     def __init__(self, f):
         self.f = f
@@ -9,16 +30,25 @@ class AD():
         self.n = None
         self.m = None
 
+    def grad(self, *args):
+        '''Returns the gradient of the function evaluated on the arguments given'''
+        out_nodes = self._evaluate(*args)
+        return np.array([node.d for node in unpack(out_nodes)])
+
     def set_seed(self, seed):
+        '''Sets a matrix of seed vectors for the forward mode pass.
+        If n inputs and m outputs are given, seed argument must have (n, m) shape.
+        '''
         self.seed = seed
 
-
     def _check_seed(self, l):
-        # Checks if seed has appropriate dimension
+        '''Checks if provided seed has appropriate dimension'''
         if len(seed) != l:
             raise ValueError("Seed dimension does not match input dimension")
 
     def _evaluate(self, *args):
+        '''Main algorithm for the forward pass. Calls helpers as appropriate.'''
+
         # Compute number of inputs
         self.n = count_recursive(args)
 
@@ -45,38 +75,78 @@ class AD():
         return self.f(*new_args)
 
 
+
+
 class Node():
+    '''Represents a Node in the evaluation graph. Holds its value and derivative. 
+
+    During evaluation, Nodes are dynamically created and destroyed as necessary. Trace is
+        stored by having each Node remember its parents and siblings.
+
+    Node(4, [1, 0, 0]):
+        creates a node object with value 4 and derivative [1, 0, 0]
+    '''
 
     def __init__(self, v, d=0):
         self.v = v
         self.d = d # If derivative is None it's assumed to be 0 (for a constant node)
-        
+
         #self.prev = []
         #self.next = []
 
-    def __str__(self):
-        return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
-
     def __add__(self, other):
         return addition(self, other)
-
     def __radd__(self, other):
         return addition(self, other)
-
     def __mul__(self, other):
         return multiplication(self, other)
-
     def __rmul__(self, other):
         return multiplication(self, other)
-
     def __pow__(self, other):
         return power(self, other)
 
+    def __pos__(self):
+        return 
+
+    def __eq__(self, other):
+        return self.v.__eq__(other.v)
+    def __ne__(self, other):
+        return self.v.__ne__(other.v)
+    def __lt__(self, other):
+        return self.v.__lt__(other.v)
+    def __gt__(self, other):
+        return self.v.__gt__(other.v)
+    def __le__(self, other):
+        return self.v.__le__(other.v)
+    def __ge__(self, other):
+        return self.v.__ge__(other.v)
+
+
+
+        
+    def __str__(self):
+        return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
+
+    def __repr__(self):
+        return "Node(" + str(self.v) + ", " + str(self.d) + ")"
+
+
 def grad(f):
-    # Syntactic sugar for AD(f).grad
+    '''Syntactic sugar for AD(f).grad.
+
+    Sample usage:
+    >>> from base import grad
+    >>> def f(x, y):
+            return x + y
+    >>> print(grad(f)(3, 5))
+    [1, 1]
+    '''
     return AD(f).grad
 
 # Import statement has to be at the bottom for some reason
 from functions import addition, multiplication, power
-from helpers import count_recursive, nodify
+from helpers import count_recursive, nodify, unpack
 
+if __name__ == "__main__":
+    print(Node(4, 5))
+    print(AD(lambda x: x ** 2))
