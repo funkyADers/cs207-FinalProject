@@ -40,10 +40,10 @@ def pair(x, y):
 
 print(grad(pair)(5, 2))
 
-#def minimum(x, y):
-#    if x < y:
-#        return x
-#    else:
-#        return y
+def minimum(x, y):
+    if x < y:
+        return x
+    else:
+        return y
 
-#print(grad(minimum)(5, 2))
+print(grad(minimum)(5, 2))
