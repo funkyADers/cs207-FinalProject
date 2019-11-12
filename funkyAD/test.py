@@ -4,7 +4,7 @@ from base import AD, grad
 def cube(x):
     return x ** 3
 
-print(AD(cube)._evaluate(10))
+print(grad(cube)(10))
 
 
 from functions import exp
@@ -12,7 +12,7 @@ from functions import exp
 def exponential(x):
     return exp(x)
 
-print(AD(exponential)._evaluate(1))
+print(grad(exponential)(1))
 
 
 import numpy as np
@@ -28,14 +28,22 @@ def add(a):
         s += x
     return s
 
-print(AD(add)._evaluate(np.array([4, 1, 8])))
+print(grad(add)(np.array([4, 1, 8])))
 
 def add2(x):
     return x.sum()
 
-print(AD(add2)._evaluate(np.array([2, 3])))
+print(grad(add2)(np.array([2, 3])))
 
 def pair(x, y):
     return x,y
 
-print(AD(pair)._evaluate(5, 2))
+print(grad(pair)(5, 2))
+
+def minimum(x, y):
+    if x < y:
+        return x
+    else:
+        return y
+
+print(grad(minimum)(5, 2))
