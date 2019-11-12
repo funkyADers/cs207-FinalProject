@@ -19,12 +19,12 @@ If you have not installed setup tools yet:
 	python3 -m pip install --user --upgrade twine
 
 Then:
-	#Change setup.py to hold new version number
+	Change setup.py to hold new version number
 	python3 setup.py sdist bdist_wheel
 	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-	#username: tyleryoo pass: sasmwng5
-	#update the version number in README and docs
-	#make sure to uninstall the old version (pip uninstall funkyAD-funkyADers) and reinstall the new one before testing
+	username: tyleryoo pass: sasmwng5
+	update the version number in README and docs
+	make sure to uninstall the old version (pip uninstall funkyAD-funkyADers) and reinstall the new one before testing
 
 Group no. 4
 Anna Zink
