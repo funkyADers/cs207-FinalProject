@@ -37,7 +37,7 @@ add = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
 addition = add
 mul = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
 multiplication = mul
-div = BaseFunction(lambda x, y: x.v / y.v, (y.v * x.d - x.v * y.d) / (y.v ** 2))
+div = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
 division = div
 _pow = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
 power = _pow
@@ -64,10 +64,10 @@ def r_der(x):
     if ceil(x) == x and floor(x) == x:
         invalid_op("rounding")
     return 0
-_round = BaseFunction(lambda x, n: round(x.v, n), r_der(x.v))
-floor = BaseFunction(lambda x: floor(x.v), r_der(x.v))
-ceil = BaseFunction(lambda x: ceil(x.v), r_der(x.v))
-trunc = BaseFunction(lambda x: trunc(x.v), r_der(x.v))
+_round = BaseFunction(lambda x, n: round(x.v, n), lambda x: r_der(x.v))
+floor = BaseFunction(lambda x: floor(x.v), lambda x: r_der(x.v))
+ceil = BaseFunction(lambda x: ceil(x.v), lambda x: r_der(x.v))
+trunc = BaseFunction(lambda x: trunc(x.v), lambda x: r_der(x.v))
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
 exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
