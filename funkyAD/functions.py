@@ -1,4 +1,4 @@
-from base import Node
+from funkyAD.base import Node
 import numpy as np
 
 class BaseFunction():
@@ -74,3 +74,6 @@ exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: np.cos(x.v))
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -np.sin(x.v))
 tan = BaseFunction(lambda x: np.tan(x,v), lambda x: 1 / (np.cos(x.v) ** 2))
+
+if __name__ == '__main__':
+    print(exp(Node(1, 2)))

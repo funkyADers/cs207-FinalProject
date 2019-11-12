@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class AD():
     '''Wraps a function to access Automatic Differentiation methods.
 
@@ -73,8 +72,6 @@ class AD():
             self.seed = None
 
         return self.f(*new_args)
-
-
 
 
 class Node():
@@ -209,9 +206,9 @@ def grad(f):
     return AD(f).grad
 
 # Import statement has to be at the bottom for some reason
-from functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
+from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
                         floordiv, _round, floor, ceil, trunc
-from helpers import count_recursive, nodify, unpack
+from funkyAD.helpers import count_recursive, nodify, unpack
 
 if __name__ == "__main__":
     print(Node(4, 5))

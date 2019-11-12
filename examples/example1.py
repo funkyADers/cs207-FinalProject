@@ -1,4 +1,4 @@
-from base import AD, grad
+from funkyAD.base import AD, grad
 
 
 def cube(x):
@@ -7,7 +7,7 @@ def cube(x):
 print(grad(cube)(10))
 
 
-from functions import exp
+from funkyAD.functions import exp
 
 def exponential(x):
     return exp(x)
