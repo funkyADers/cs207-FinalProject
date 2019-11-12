@@ -1,5 +1,5 @@
 # This import statement does not work
-from ..funkyAD.base import AD
+from funkyAD.base import AD
 
 
 def add(x, y):
