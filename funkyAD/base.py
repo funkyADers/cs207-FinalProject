@@ -107,7 +107,7 @@ class Node():
         return power(self, other)
     def __rpow__(self, other):
         ## TODO
-        raise NotImplemented
+        raise NotImplementedError()
     def __floordiv__(self, other):
         return floordiv(self, other)
     def __rfloordiv__(self, other):
@@ -137,7 +137,6 @@ class Node():
     def __trunc__(self):
         return trunc(self)
 
-
     def __eq__(self, other):
         return self.v.__eq__(other.v)
     def __ne__(self, other):
@@ -158,7 +157,7 @@ class Node():
     def __float__(self):
         return self
     def __complex__(self):
-        raise NotImplemented("Complex number not supported")
+        raise NotImplementedError("Complex numbers are not supported")
         
     def __str__(self):
         return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
