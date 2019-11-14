@@ -42,7 +42,7 @@ class AD():
 
     def _check_seed(self, l):
         '''Checks if provided seed has appropriate dimension'''
-        if len(seed) != l:
+        if len(self.seed) != l:
             raise ValueError("Seed dimension does not match input dimension")
 
     def _evaluate(self, *args):
@@ -152,9 +152,9 @@ class Node():
         return self.v.__ge__(other.v)
 
     def __int__(self):
-        return self.__floor__(self)
+        return self.__floor__()
     def __long__(self):
-        return self.__floor__(self)   
+        return self.__floor__()   
     def __float__(self):
         return self
     def __complex__(self):
