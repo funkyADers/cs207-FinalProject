@@ -42,7 +42,7 @@ class AD():
 
     def _check_seed(self, l):
         '''Checks if provided seed has appropriate dimension'''
-        if len(seed) != l:
+        if len(self.seed) != l:
             raise ValueError("Seed dimension does not match input dimension")
 
     def _evaluate(self, *args):
@@ -107,7 +107,7 @@ class Node():
         return power(self, other)
     def __rpow__(self, other):
         ## TODO
-        raise NotImplemented
+        raise NotImplementedError()
     def __floordiv__(self, other):
         return floordiv(self, other)
     def __rfloordiv__(self, other):
@@ -137,7 +137,6 @@ class Node():
     def __trunc__(self):
         return trunc(self)
 
-
     def __eq__(self, other):
         return self.v.__eq__(other.v)
     def __ne__(self, other):
@@ -152,39 +151,13 @@ class Node():
         return self.v.__ge__(other.v)
 
     def __int__(self):
-        return self.__floor__(self)
+        return self.__floor__()
     def __long__(self):
-        return self.__floor__(self)   
+        return self.__floor__()   
     def __float__(self):
         return self
     def __complex__(self):
-        raise NotImplemented("Complex number not supported")
-        
-    def __str__(self):
-        return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
-
-    def __repr__(self):
-        return "Node(" + str(self.v) + ", " + str(self.d) + ")"
-
-
-    def __pos__(self):
-        return 
-
-    def __eq__(self, other):
-        return self.v.__eq__(other.v)
-    def __ne__(self, other):
-        return self.v.__ne__(other.v)
-    def __lt__(self, other):
-        return self.v.__lt__(other.v)
-    def __gt__(self, other):
-        return self.v.__gt__(other.v)
-    def __le__(self, other):
-        return self.v.__le__(other.v)
-    def __ge__(self, other):
-        return self.v.__ge__(other.v)
-
-
-
+        raise NotImplementedError("Complex numbers are not supported")
         
     def __str__(self):
         return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
