@@ -167,32 +167,6 @@ class Node():
         return "Node(" + str(self.v) + ", " + str(self.d) + ")"
 
 
-    def __pos__(self):
-        return 
-
-    def __eq__(self, other):
-        return self.v.__eq__(other.v)
-    def __ne__(self, other):
-        return self.v.__ne__(other.v)
-    def __lt__(self, other):
-        return self.v.__lt__(other.v)
-    def __gt__(self, other):
-        return self.v.__gt__(other.v)
-    def __le__(self, other):
-        return self.v.__le__(other.v)
-    def __ge__(self, other):
-        return self.v.__ge__(other.v)
-
-
-
-        
-    def __str__(self):
-        return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
-
-    def __repr__(self):
-        return "Node(" + str(self.v) + ", " + str(self.d) + ")"
-
-
 def grad(f):
     '''Syntactic sugar for AD(f).grad.
 
