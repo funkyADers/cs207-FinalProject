@@ -10,7 +10,7 @@ Installation instructions:
 	conda create -n env_name python=3.6 anaconda
 	source activate env_name
 	pip install -r requirements.txt
-	pip install -i https://test.pypi.org/simple/ funkyAD-funkyADers==0.0.3
+	pip install -i https://test.pypi.org/simple/ funkyAD-funkyADers==0.0.4
 
 Releasing a new version of the package instructions:
 
