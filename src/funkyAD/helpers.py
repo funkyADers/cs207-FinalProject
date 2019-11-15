@@ -35,7 +35,7 @@ def nodify(args, seed):
         # TODO: we only support lists and np.arrays at this time
         def agument(x):
             # Deferred import to work around circular dependencies
-            from .base import Node
+            from base import Node
             nonlocal i
             node = Node(x, seed[i])
             i += 1

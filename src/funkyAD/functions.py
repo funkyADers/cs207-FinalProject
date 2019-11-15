@@ -25,7 +25,7 @@ class BaseFunction():
 
     def __call__(self, *args):
         # Deferred import to work around circular dependencies
-        from .base import Node
+        from base import Node
         # Replace constants with node objects with no derivative
         new_args = [a if isinstance(a, Node) else Node(a) for a in args]
 
