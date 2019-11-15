@@ -1,5 +1,5 @@
 import numpy as np
-from funkyAD.base import Node
+from base import Node
 
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''

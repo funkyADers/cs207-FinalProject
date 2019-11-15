@@ -1,4 +1,5 @@
-from funkyAD.base import Node
+from base import Node
+#from funkyAD.base import Node
 import numpy as np
 
 class BaseFunction():
