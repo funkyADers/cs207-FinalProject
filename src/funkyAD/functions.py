@@ -1,5 +1,7 @@
-from funkyAD.base import Node
 import numpy as np
+from math import floor, ceil, trunc
+#from base import Node
+#from funkyAD.base import Node
 
 class BaseFunction():
     '''Defines a function that can be used on Node objects and propagate the partial derivatives
@@ -22,6 +24,8 @@ class BaseFunction():
         self.d = derivative
 
     def __call__(self, *args):
+        # Deferred import to work around circular dependencies
+        from .base import Node
         # Replace constants with node objects with no derivative
         new_args = [a if isinstance(a, Node) else Node(a) for a in args]
 
@@ -58,12 +62,12 @@ def sign(x):
 _abs = BaseFunction(lambda x: abs(x.v), lambda x: x.d * sign(x.v))
 invert = BaseFunction(lambda x: x.v.__invert__(), lambda x: invalid_op("__invert__"))
 
-from math import floor, ceil, trunc
 def r_der(x):
     # Derivative of rounding functions
     if ceil(x) == x and floor(x) == x:
         invalid_op("rounding")
     return 0
+
 _round = BaseFunction(lambda x, n: round(x.v, n), lambda x: r_der(x.v))
 floor = BaseFunction(lambda x: floor(x.v), lambda x: r_der(x.v))
 ceil = BaseFunction(lambda x: ceil(x.v), lambda x: r_der(x.v))
@@ -75,5 +79,5 @@ sin = BaseFunction(lambda x: np.sin(x.v), lambda x: np.cos(x.v))
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -np.sin(x.v))
 tan = BaseFunction(lambda x: np.tan(x.v), lambda x: 1 / (np.cos(x.v) ** 2))
 
-if __name__ == '__main__':
-    print(exp(Node(1, 2)))
+#if __name__ == '__main__':
+#    print(exp(Node(1, 2)))
