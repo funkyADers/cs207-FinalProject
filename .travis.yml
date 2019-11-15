@@ -2,8 +2,11 @@ language: python
 python:
     - "3.6"
 before_install:
-    - pip install pytest pytest-cov
+    - pip install -U pip
+    - pip install -U pytest pytest-cov
     - pip install codecov
+#install:
+#    - pip install .
 script:
     - pytest --cov=./
 after_success:
