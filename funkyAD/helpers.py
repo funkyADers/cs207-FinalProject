@@ -1,5 +1,5 @@
 import numpy as np
-from base import Node
+#from base import Node
 
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
@@ -34,6 +34,8 @@ def nodify(args, seed):
     for a in args:
         # TODO: we only support lists and np.arrays at this time
         def agument(x):
+            # Deferred import to work around circular dependencies
+            from base import Node
             nonlocal i
             node = Node(x, seed[i])
             i += 1
