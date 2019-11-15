@@ -1,6 +1,12 @@
 import pytest
 from funkyAD.base import Node
-import funkyAD.functions as f
+from funkyAD.functions import *
 
-def test_addition_nodes():
-    pass
+def test_node_add():
+    assert add(Node(1, 2), Node(3, 4)) == Node(4, 6)
+
+def test_node_addition_overload():
+    assert Node(1, 2) + Node(3, 4) == Node(4, 6)
+
+def test_add_constants():
+    assert add(1, 2) == Node(3, 0)
