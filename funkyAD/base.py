@@ -1,4 +1,7 @@
 import numpy as np
+from functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
+                        floordiv, _round, floor, ceil, trunc
+from helpers import count_recursive, nodify, unpack
 
 class AD():
     '''Wraps a function to access Automatic Differentiation methods.
@@ -178,14 +181,13 @@ def grad(f):
     '''
     return AD(f).grad
 
-# Import statement has to be at the bottom for some reason
-from functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
-from helpers import count_recursive, nodify, unpack
 
-""" from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
+"""
+# Import statement has to be at the bottom for some reason
+from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
                         floordiv, _round, floor, ceil, trunc
-from funkyAD.helpers import count_recursive, nodify, unpack """
+from funkyAD.helpers import count_recursive, nodify, unpack
+"""
 
 if __name__ == "__main__":
     print(Node(4, 5))
