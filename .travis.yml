@@ -9,6 +9,6 @@ install:
     - pip install -r requirements.txt
     - pip install -e .
 script:
-    - pytest --cov=./
+    - pytest --cov funkyAD
 after_success:
     - codecov
