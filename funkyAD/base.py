@@ -1,7 +1,7 @@
 import numpy as np
-from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
+from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
                         floordiv, _round, floor, ceil, trunc
-from funkyAD.helpers import count_recursive, nodify, unpack
+from .helpers import count_recursive, nodify, unpack
 
 class AD():
     '''Wraps a function to access Automatic Differentiation methods.
