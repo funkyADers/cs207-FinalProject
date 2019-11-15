@@ -1,4 +1,5 @@
 import numpy as np
+from math import floor, ceil, trunc
 #from base import Node
 #from funkyAD.base import Node
 
@@ -61,12 +62,12 @@ def sign(x):
 _abs = BaseFunction(lambda x: abs(x.v), lambda x: x.d * sign(x.v))
 invert = BaseFunction(lambda x: x.v.__invert__(), lambda x: invalid_op("__invert__"))
 
-from math import floor, ceil, trunc
 def r_der(x):
     # Derivative of rounding functions
     if ceil(x) == x and floor(x) == x:
         invalid_op("rounding")
     return 0
+
 _round = BaseFunction(lambda x, n: round(x.v, n), lambda x: r_der(x.v))
 floor = BaseFunction(lambda x: floor(x.v), lambda x: r_der(x.v))
 ceil = BaseFunction(lambda x: ceil(x.v), lambda x: r_der(x.v))
