@@ -42,12 +42,12 @@ def test_division_constants():
 
 # Floor division valid Nodes
 def test_node_floordivision():
-    assert floordiv(Node(5, 3), Node(2, 4)) == Node(2.5, -3.5)
+    assert floordiv(Node(8, 8), Node(3, 3)) == Node(2, 0)
 
 # Floor division overload
 def test_node_floordivision_overload():
-    assert Node(5, 3) // Node(2, 4) == Node(2.5, -3.5)
+    assert Node(8, 8) // Node(3, 3) == Node(2, 0)
 
 # Floor division constants
 def test_floordivision_constants():
-    assert floordiv(4, 2) == Node(2, 0)
+    assert floordiv(11, 3) == Node(3, 0)

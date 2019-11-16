@@ -52,9 +52,11 @@ def sign(x):
 _abs = BaseFunction(lambda x: abs(x.v), lambda x: x.d * sign(x.v))
 invert = BaseFunction(lambda x: x.v.__invert__(), lambda x: invalid_op("__invert__"))
 
+# The derivative of the floor of x is 0 when x is non-integer and not defined when it is
 def r_der(x):
     # Derivative of rounding functions
     if math.ceil(x) == x and math.floor(x) == x:
+        # Derivative of floor of integer is not mathematically defined
         invalid_op("rounding")
     return 0
 
