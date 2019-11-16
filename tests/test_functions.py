@@ -55,4 +55,3 @@ def test_power():
     assert power(4, 2) == Node(16, 0)
     # Node and constant
     assert Node(3, 3) ** 2 == Node(9, 18)
-

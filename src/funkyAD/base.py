@@ -150,6 +150,7 @@ class Node():
         return self.v.__eq__(other.v)
     def __ne__(self, other):
         return self.v.__ne__(other.v)
+
     def __lt__(self, other):
         return self.v.__lt__(other.v)
     def __gt__(self, other):
