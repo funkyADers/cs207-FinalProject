@@ -1,13 +1,13 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
+from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
 
 # Only need one overload test each; if that works, all other variations will too
 
 # If one function on invalid Node raises correct error, all will
 def test_addition_invalid_node():
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         addition(Node('Text', 1), 2)
 
 def test_addition():
@@ -78,6 +78,14 @@ def test_neg():
 def test_sign():
     assert sign(-5) == sign(-2.3) == -1
     assert sign(5) == sign(2.3) == 1
+
+def test_r_der_nonint():
+    assert r_der(5.5) == 0
+    assert r_der(-1.3) == 0
+
+def test_r_der_int():
+    with pytest.raises(ValueError):
+        r_der(3)
     
 def test_abs():
     assert _abs(Node(2, 3)) == Node(2, 3)
@@ -91,8 +99,13 @@ def test_invert():
         invert(Node(1, 2))
 
 def test_round():
-    assert _round(Node(2.56, 5.55), 1) == Node(2.6, 0)
+    # Not specifying num digits
     assert _round(Node(2.56, 5.55)) == Node(3, 0)
+    assert _round(1.5) == Node(2, 0)
+    # Specifying num digits
+    assert _round(Node(2.56, 5.55), 1) == Node(2.6, 0)
+    assert _round(1.53, 1) == Node(1.5, 0)
+    assert _round(1.539, 2) == Node(1.54, 0)
 
 def test_floor():
     # Nodes
@@ -134,35 +147,18 @@ def test_trunc_undefined():
 
 def test_exp():
     # Nodes
-
-
+    assert exp(Node(2, 0)) == Node(np.exp(2), 0)
+    assert exp(Node(2, 2)) == Node(np.exp(2), 2*np.exp(2))
+    assert exp(Node(-2, -2)) == Node(np.exp(-2), -2*np.exp(-2))
     # Constants
     assert exp(1) == Node(np.exp(1), 0)
     assert exp(-1) == Node(np.exp(-1), 0)
 
 def test_sin():
-    # Two nodes via function call
     pass
-    # Two nodes via overload
-    
-    # Two constants via function call
-    
-    # Node and constant
 
 def test_cos():
-    # Two nodes via function call
     pass
-    # Two nodes via overload
-    
-    # Two constants via function call
-    
-    # Node and constant
 
 def test_tan():
-    # Two nodes via function call
     pass
-    # Two nodes via overload
-    
-    # Two constants via function call
-    
-    # Node and constant
