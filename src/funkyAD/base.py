@@ -88,6 +88,13 @@ class Node():
     '''
 
     def __init__(self, v, d=0):
+        # Verify that numeric
+        try:
+            float(v)
+            float(d)
+        except ValueError:
+            raise TypeError('Value and derivative must be numeric.')
+
         self.v = v
         self.d = d # If derivative is None it's assumed to be 0 (for a constant node)
 

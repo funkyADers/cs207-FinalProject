@@ -31,10 +31,6 @@ class BaseFunction():
 
         new = Node(self.f(*new_args), self.d(*new_args))
 
-        #new.prev = [*args]
-        #for x in args:
-        #    x.next.append(new)
-
         return new
 
 add = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
