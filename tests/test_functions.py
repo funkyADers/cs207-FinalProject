@@ -1,6 +1,6 @@
 import pytest
 from funkyAD.base import Node
-from funkyAD.functions import add, addition, mul, multiplication
+from funkyAD.functions import add, addition, mul, multiplication, div, division, derp
 
 # Addition valid Nodes
 def test_node_add():
@@ -16,7 +16,7 @@ def test_add_constants():
 
 # Multiplication valid Nodes
 def test_node_multiply():
-    assert mul(Node(1, 2), Node(3, 4)) == Node(3, 10)
+    assert multiplication(Node(1, 2), Node(3, 4)) == Node(3, 10)
 
 # Multiplication overload
 def test_node_multiply_overload():
@@ -24,4 +24,17 @@ def test_node_multiply_overload():
 
 # Multiplication constants
 def test_multiply_constants():
-    assert mul(1, 2) == Node(2, 0)
+    assert multiplication(1, 2) == Node(2, 0)
+
+# Division valid Nodes
+def test_node_division():
+    assert division(Node(5, 3), Node(2, 4)) == Node(2.5, -3.5)
+
+# Division overload
+def test_node_division_overload():
+    assert Node(5, 3) / Node(2, 4) == Node(2.5, -3.5)
+
+# Division constants
+def test_division_constants():
+    assert division(4, 2) == Node(2, 0)
+

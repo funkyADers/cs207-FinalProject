@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from math import floor, ceil, trunc
 #from base import Node
 #from funkyAD.base import Node
@@ -60,7 +61,7 @@ invert = BaseFunction(lambda x: x.v.__invert__(), lambda x: invalid_op("__invert
 
 def r_der(x):
     # Derivative of rounding functions
-    if ceil(x) == x and floor(x) == x:
+    if math.ceil(x) == x and math.floor(x) == x:
         invalid_op("rounding")
     return 0
 
