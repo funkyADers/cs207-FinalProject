@@ -1,8 +1,5 @@
 import numpy as np
 import math
-from math import floor, ceil, trunc
-#from base import Node
-#from funkyAD.base import Node
 
 class BaseFunction():
     '''Defines a function that can be used on Node objects and propagate the partial derivatives
@@ -66,9 +63,9 @@ def r_der(x):
     return 0
 
 _round = BaseFunction(lambda x, n: round(x.v, n), lambda x: r_der(x.v))
-floor = BaseFunction(lambda x: floor(x.v), lambda x: r_der(x.v))
-ceil = BaseFunction(lambda x: ceil(x.v), lambda x: r_der(x.v))
-trunc = BaseFunction(lambda x: trunc(x.v), lambda x: r_der(x.v))
+floor = BaseFunction(lambda x: math.floor(x.v), lambda x: r_der(x.v))
+ceil = BaseFunction(lambda x: math.ceil(x.v), lambda x: r_der(x.v))
+trunc = BaseFunction(lambda x: math.trunc(x.v), lambda x: r_der(x.v))
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
 exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
