@@ -62,7 +62,7 @@ def r_der(x):
         invalid_op("rounding")
     return 0
 
-_round = BaseFunction(lambda x, n: round(x.v, n), lambda x: r_der(x.v))
+_round = BaseFunction(lambda x, n = 0: round(x.v, n), lambda x: r_der(x.v))
 floor = BaseFunction(lambda x: math.floor(x.v), lambda x: r_der(x.v))
 ceil = BaseFunction(lambda x: math.ceil(x.v), lambda x: r_der(x.v))
 trunc = BaseFunction(lambda x: math.trunc(x.v), lambda x: r_der(x.v))
