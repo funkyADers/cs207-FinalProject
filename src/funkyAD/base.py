@@ -147,9 +147,9 @@ class Node():
         return trunc(self)
 
     def __eq__(self, other):
-        return self.v.__eq__(other.v)
+        return self.v.__eq__(other.v) and self.d.__eq__(other.d)
     def __ne__(self, other):
-        return self.v.__ne__(other.v)
+        return self.v.__ne__(other.v) or self.d.__eq__(other.d)
 
     def __lt__(self, other):
         return self.v.__lt__(other.v)
