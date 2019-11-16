@@ -31,14 +31,10 @@ class BaseFunction():
 
         return new
 
-add = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
-addition = add
-mul = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
-multiplication = mul
-div = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
-division = div
-_pow = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
-power = _pow
+addition = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
+multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
+division = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
+power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
 pos = BaseFunction(lambda x: +x.v, lambda x: +x.d)
 neg = BaseFunction(lambda x: -x.v, lambda x: -x.d)
 

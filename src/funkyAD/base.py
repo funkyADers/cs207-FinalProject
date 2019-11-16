@@ -1,6 +1,5 @@
 import numpy as np
-from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
+from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, floordiv, _round, floor, ceil, trunc
 from .helpers import count_recursive, nodify, unpack
 
 class AD():
