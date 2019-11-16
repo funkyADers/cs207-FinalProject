@@ -86,4 +86,14 @@ def test_invert():
         invert(Node(1, 2))
 
 def test_round():
+    assert _round(Node(2.5, 5.5), 1) == Node(3, 0)
+
+def test_():
+    # Two nodes via function call
     pass
+    # Two nodes via overload
+    
+    # Two constants via function call
+    
+    # Node and constant
+
