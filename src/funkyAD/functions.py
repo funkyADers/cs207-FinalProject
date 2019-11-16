@@ -38,9 +38,11 @@ power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 
 pos = BaseFunction(lambda x: +x.v, lambda x: +x.d)
 neg = BaseFunction(lambda x: -x.v, lambda x: -x.d)
 
+# Function to raise error if function is non-differentiable
 def invalid_op(name):
-    raise ValueError("Function " + name + " is not differentiable")
+    raise ValueError("Function '" + name + "' is not differentiable")
 
+# Get sign of a value
 def sign(x):
     if x < 0:
         return -1

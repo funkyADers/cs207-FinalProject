@@ -1,6 +1,6 @@
 import pytest
 from funkyAD.base import Node
-from funkyAD.functions import addition, multiplication, division, floordiv, power
+from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, pos, neg, _abs, invert, _round
 
 # No need to test for invalid Nodes, those are handled in the creation of Nodes
 # Only need one overload test each; if that works, all other variations via overloads will too
@@ -55,3 +55,35 @@ def test_power():
     assert power(4, 2) == Node(16, 0)
     # Node and constant
     assert Node(3, 3) ** 2 == Node(9, 18)
+    # Negative power (not invert, but chain rule)
+    assert Node(2, 3) ** -2 == Node(0.25, -0.75)
+
+def test_pos():
+    assert pos(Node(1, 2)) == Node(1, 2)
+    assert pos(Node(-1, -2)) == Node(-1, -2)
+    assert pos(2) == Node(2, 0)
+    assert pos(-2) == Node(-2, 0)
+    
+def test_neg():
+    assert neg(Node(1, 2)) == Node(-1, -2)
+    assert neg(Node(-1, -2)) == Node(1, 2)
+    assert neg(2) == Node(-2, 0)
+    assert neg(-2) == Node(2, 0)
+
+def test_sign():
+    assert sign(-5) == sign(-2.3) == -1
+    assert sign(5) == sign(2.3) == 1
+    
+def test_abs():
+    assert _abs(Node(2, 3)) == Node(2, 3)
+    assert _abs(Node(-2, 3)) == Node(2, -3)
+    assert _abs(Node(2, -3)) == Node(2, -3)
+    assert _abs(Node(-2, -3)) == Node(2, 3)
+
+def test_invert():
+    # Invert is not differentiable, verify that it raises the expected error
+    with pytest.raises(ValueError):
+        invert(Node(1, 2))
+
+def test_round():
+    pass
