@@ -1,6 +1,6 @@
 import pytest
 from funkyAD.base import Node
-from funkyAD.functions import add, addition, mul, multiplication, div, division, floordiv
+from funkyAD.functions import addition, multiplication, division, floordiv
 
 # No need to test for invalid Nodes, those are handled in the creation of Nodes
 

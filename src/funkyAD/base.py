@@ -190,15 +190,3 @@ def grad(f):
     [1, 1]
     '''
     return AD(f).grad
-
-
-"""
-# Import statement has to be at the bottom for some reason
-from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
-from funkyAD.helpers import count_recursive, nodify, unpack
-"""
-
-if __name__ == "__main__":
-    print(Node(4, 5))
-    print(AD(lambda x: x ** 2))
