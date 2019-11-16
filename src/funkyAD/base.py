@@ -125,10 +125,6 @@ class Node():
         return division(self, other)
     def __rtruediv__(self, other):
         return division(other, self)
-    """ def __div__(self, other):
-        return division(self, other)
-    def __rdiv__(self, other):
-        return division(other, self) """
 
     # TODO
     #def __iadd__(self, other): etc
