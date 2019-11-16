@@ -1,5 +1,4 @@
 import numpy as np
-import math
 
 class BaseFunction():
     '''Defines a function that can be used on Node objects and propagate the partial derivatives
@@ -57,15 +56,16 @@ invert = BaseFunction(lambda x: x.v.__invert__(), lambda x: invalid_op("__invert
 # The derivative of the floor of x is 0 when x is non-integer and not defined when it is
 def r_der(x):
     # Derivative of rounding functions
-    if math.ceil(x) == x and math.floor(x) == x:
+    if np.ceil(x) == x and np.floor(x) == x:
         # Derivative of floor of integer is not mathematically defined
-        invalid_op("rounding")
+        invalid_op('rounding')
     return 0
 
-_round = BaseFunction(lambda x, n = 0: round(x.v, n), lambda x: r_der(x.v))
-floor = BaseFunction(lambda x: math.floor(x.v), lambda x: r_der(x.v))
-ceil = BaseFunction(lambda x: math.ceil(x.v), lambda x: r_der(x.v))
-trunc = BaseFunction(lambda x: math.trunc(x.v), lambda x: r_der(x.v))
+_round = BaseFunction(lambda x, n = 0: np.round(x.v, n), lambda x: r_der(x.v))
+floor = BaseFunction(lambda x: np.floor(x.v), lambda x: r_der(x.v))
+ceil = BaseFunction(lambda x: np.ceil(x.v), lambda x: r_der(x.v))
+trunc = BaseFunction(lambda x: np.trunc(x.v), lambda x: r_der(x.v))
+
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
 exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))

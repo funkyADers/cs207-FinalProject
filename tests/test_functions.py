@@ -1,9 +1,14 @@
 import pytest
+import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, pos, neg, _abs, invert, _round
+from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
 
-# No need to test for invalid Nodes, those are handled in the creation of Nodes
-# Only need one overload test each; if that works, all other variations via overloads will too
+# Only need one overload test each; if that works, all other variations will too
+
+# If one function on invalid Node raises correct error, all will
+def test_addition_invalid_node():
+    with pytest.raises(ValueError):
+        addition(Node('Text', 1), 2)
 
 def test_addition():
     # Two nodes via function call
@@ -86,9 +91,56 @@ def test_invert():
         invert(Node(1, 2))
 
 def test_round():
-    assert _round(Node(2.5, 5.5), 1) == Node(3, 0)
+    assert _round(Node(2.56, 5.55), 1) == Node(2.6, 0)
+    assert _round(Node(2.56, 5.55)) == Node(3, 0)
 
-def test_():
+def test_floor():
+    # Nodes
+    assert floor(Node(3.3, 3)) == Node(3, 0)
+    assert floor(Node(3.9, 3)) == Node(3, 0)
+    assert floor(Node(-2.5, -2)) == Node(-3, 0)
+    # Constants
+    assert floor(3.3) == Node(3, 0)
+    assert floor(-3.2) == Node(-4, 0)
+
+def test_floor_undefined():
+    with pytest.raises(ValueError):
+        floor(Node(2, 2))
+
+def test_ceil():
+    # Nodes
+    assert ceil(Node(4.1, 3)) == Node(5, 0)
+    assert ceil(Node(-2.5, -2)) == Node(-2, 0)
+    # Constants
+    assert ceil(5.1) == Node(6, 0)
+    assert ceil(-3.5) == Node(-3, 0)
+
+def test_ceil_undefined():
+    with pytest.raises(ValueError):
+        ceil(Node(2, 2))
+
+def test_trunc():
+    # Nodes
+    assert trunc(Node(2.1, 0)) == Node(2, 0)
+    assert trunc(Node(2.9, 0)) == Node(2, 0)
+    assert trunc(Node(-1.5, 0)) == Node(-1, 0)
+    # Constants
+    assert trunc(1.5) == Node(1, 0)
+    assert trunc(-1.5) == Node(-1, 0)
+
+def test_trunc_undefined():
+    with pytest.raises(ValueError):
+        trunc(Node(1, 1))
+
+def test_exp():
+    # Nodes
+
+
+    # Constants
+    assert exp(1) == Node(np.exp(1), 0)
+    assert exp(-1) == Node(np.exp(-1), 0)
+
+def test_sin():
     # Two nodes via function call
     pass
     # Two nodes via overload
@@ -97,3 +149,20 @@ def test_():
     
     # Node and constant
 
+def test_cos():
+    # Two nodes via function call
+    pass
+    # Two nodes via overload
+    
+    # Two constants via function call
+    
+    # Node and constant
+
+def test_tan():
+    # Two nodes via function call
+    pass
+    # Two nodes via overload
+    
+    # Two constants via function call
+    
+    # Node and constant
