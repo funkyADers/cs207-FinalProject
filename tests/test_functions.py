@@ -1,6 +1,6 @@
 import pytest
 from funkyAD.base import Node
-from funkyAD.functions import addition, multiplication, division, floordiv
+from funkyAD.functions import addition, multiplication, division, floordiv, power
 
 # No need to test for invalid Nodes, those are handled in the creation of Nodes
 
@@ -52,3 +52,14 @@ def test_node_floordivision_overload():
 def test_floordivision_constants():
     assert floordiv(11, 3) == Node(3, 0)
 
+# Power valid Nodes
+def test_nodes_power():
+    assert power(Node(2, 2), Node(3, 3)) == Node(8, 24)
+
+# Power overload
+def test_nodes_power_overload():
+    assert Node(2, 2) ** Node(3, 3) == Node(8, 24)
+
+# Power constants
+def test_constants_power():
+    assert power(4, 2) == Node(16, 0)
