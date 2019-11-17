@@ -10,12 +10,13 @@ from funkyAD.functions import exp
 # test AD class
 def test_AD_string_input():
     AD('hello')
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         AD('hello').grad(1) 
 
-def test_constant():
+def test_non_callable_constant_f():
     adobj = AD(2) 
-    assert adobj.grad(2)==[[2]]
+    with pytest.raises(TypeError): 
+        adobj.grad(2)==[[2]]
 
 def test_constant_function(): 
     adobj = AD(lambda x: 4)
@@ -23,7 +24,8 @@ def test_constant_function():
 
 def test_no_args():
     adobj = AD(lambda x: x)
-    assert adobj._evaluate()==0
+    with pytest.raises(TypeError):
+        adobj._evaluate()
 
 def test_usage_example(): 
     def f(x):
@@ -44,7 +46,7 @@ def test_set_seed():
 def test_set_seed_nonarray():
     adobj = AD(lambda x: x*x)
     with pytest.raises(ValueError): 
-        adobj.set_seed(4)
+        adobj.set_seed('what')
 
 def test_check_seed():
     adobj = AD(lambda x: 2*x+x**3)
