@@ -22,10 +22,14 @@ class AD():
     >>> def f(x):
             return exp(x)
     >>> print(AD(f).grad(0))
-    1
+    [[1]]
     '''
 
     def __init__(self, f):
+        try:
+            callable(f)
+        except: 
+            raise TypeError('The input function to AD must be callable')
         self.f = f
         self.seed = None
         self.n = None
@@ -40,7 +44,10 @@ class AD():
         '''Sets a matrix of seed vectors for the forward mode pass.
         If n inputs and m outputs are given, seed argument must have (n, m) shape.
         '''
-        self.seed = seed
+        try:
+            self.seed = np.asarray(seed,dtype=np.float32)
+        except: 
+            raise ValueError("Seed input must be an array with numeric elements")
 
     def _check_seed(self, l):
         '''Checks if provided seed has appropriate dimension'''
@@ -53,8 +60,12 @@ class AD():
         # Compute number of inputs
         self.n = count_recursive(args)
 
-        # Try evaluate the function
-        output = self.f(*args)
+        # Try to evaluate the function
+        try:
+            output = self.f(*args)
+        except:
+            raise TypeError('function and *args are not callable') 
+            
         # Compute numer of outputs
         self.m = count_recursive(output)
 
@@ -87,15 +98,15 @@ class Node():
     '''
 
     def __init__(self, v, d=0):
+        self.v = v
+        self.d = d # if derivative is none its assumed to be 0 (for constant node)
+
         # Verify that numeric
         try:
-            float(v)
-            float(d)
-        except ValueError:
+            np.asarray(self.v, dtype=np.float64)
+            np.asarray(self.d, dtype=np.float64)
+        except:
             raise TypeError('Value and derivative must be numeric.')
-
-        self.v = v
-        self.d = d # If derivative is None it's assumed to be 0 (for a constant node)
 
         #self.prev = []
         #self.next = []
