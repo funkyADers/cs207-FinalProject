@@ -1,6 +1,5 @@
 import numpy as np
-from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
+from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, floordiv, _round, floor, ceil, trunc
 from .helpers import count_recursive, nodify, unpack
 
 class AD():
@@ -122,9 +121,9 @@ class Node():
         return floordiv(self, other)
     def __rfloordiv__(self, other):
         return floordiv(other, self)
-    def __div__(self, other):
+    def __truediv__(self, other):
         return division(self, other)
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         return division(other, self)
 
     # TODO
@@ -148,9 +147,10 @@ class Node():
         return trunc(self)
 
     def __eq__(self, other):
-        return self.v.__eq__(other.v)
+        return self.v.__eq__(other.v) and self.d.__eq__(other.d)
     def __ne__(self, other):
-        return self.v.__ne__(other.v)
+        return self.v.__ne__(other.v) or self.d.__ne__(other.d)
+
     def __lt__(self, other):
         return self.v.__lt__(other.v)
     def __gt__(self, other):
@@ -187,15 +187,3 @@ def grad(f):
     [1, 1]
     '''
     return AD(f).grad
-
-
-"""
-# Import statement has to be at the bottom for some reason
-from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
-from funkyAD.helpers import count_recursive, nodify, unpack
-"""
-
-if __name__ == "__main__":
-    print(Node(4, 5))
-    print(AD(lambda x: x ** 2))

@@ -1,7 +1,4 @@
 import numpy as np
-from math import floor, ceil, trunc
-#from base import Node
-#from funkyAD.base import Node
 
 class BaseFunction():
     '''Defines a function that can be used on Node objects and propagate the partial derivatives
@@ -33,20 +30,18 @@ class BaseFunction():
 
         return new
 
-add = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
-addition = add
-mul = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
-multiplication = mul
-div = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
-division = div
-_pow = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
-power = _pow
+addition = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
+multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
+division = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
+power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
 pos = BaseFunction(lambda x: +x.v, lambda x: +x.d)
 neg = BaseFunction(lambda x: -x.v, lambda x: -x.d)
 
+# Function to raise error if function is non-differentiable
 def invalid_op(name):
-    raise ValueError("Function " + name + " is not differentiable")
+    raise ValueError("Function '" + name + "' is not differentiable")
 
+# Get sign of a value
 def sign(x):
     if x < 0:
         return -1
@@ -58,22 +53,25 @@ def sign(x):
 _abs = BaseFunction(lambda x: abs(x.v), lambda x: x.d * sign(x.v))
 invert = BaseFunction(lambda x: x.v.__invert__(), lambda x: invalid_op("__invert__"))
 
+# The derivative of the floor of x is 0 when x is non-integer and not defined when it is
 def r_der(x):
     # Derivative of rounding functions
-    if ceil(x) == x and floor(x) == x:
-        invalid_op("rounding")
+    if np.ceil(x) == x and np.floor(x) == x:
+        # Derivative of floor of integer is not mathematically defined
+        invalid_op('rounding')
     return 0
 
-_round = BaseFunction(lambda x, n: round(x.v, n), lambda x: r_der(x.v))
-floor = BaseFunction(lambda x: floor(x.v), lambda x: r_der(x.v))
-ceil = BaseFunction(lambda x: ceil(x.v), lambda x: r_der(x.v))
-trunc = BaseFunction(lambda x: trunc(x.v), lambda x: r_der(x.v))
+_round = BaseFunction(lambda x, n = 0: np.round(x.v, n), lambda x: r_der(x.v))
+floor = BaseFunction(lambda x: np.floor(x.v), lambda x: r_der(x.v))
+ceil = BaseFunction(lambda x: np.ceil(x.v), lambda x: r_der(x.v))
+trunc = BaseFunction(lambda x: np.trunc(x.v), lambda x: r_der(x.v))
+
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
 exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
-sin = BaseFunction(lambda x: np.sin(x.v), lambda x: np.cos(x.v))
-cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -np.sin(x.v))
-tan = BaseFunction(lambda x: np.tan(x.v), lambda x: 1 / (np.cos(x.v) ** 2))
+sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
+cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))
+tan = BaseFunction(lambda x: np.tan(x.v), lambda x: x.d / (np.cos(x.v) ** 2))
 
 #if __name__ == '__main__':
 #    print(exp(Node(1, 2)))
