@@ -155,10 +155,13 @@ def test_exp():
     assert exp(-1) == Node(np.exp(-1), 0)
 
 def test_sin():
-    pass
+    assert sin(Node(2, 3)) == Node(np.sin(2), 3*np.cos(2))
+    assert sin(2) == Node(np.sin(2), 0)
 
 def test_cos():
-    pass
+    assert cos(Node(2, 3)) == Node(np.cos(2), -3*np.sin(2))
+    assert cos(2) == Node(np.cos(2), 0)
 
 def test_tan():
-    pass
+    assert tan(Node(2, 3)) == Node(np.tan(2), 3/np.cos(2)**2)
+    assert tan(2) == Node(np.tan(2), 0)
