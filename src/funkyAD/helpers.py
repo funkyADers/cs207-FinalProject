@@ -4,7 +4,7 @@ import numpy as np
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
     total = 0
-    if isinstance(args, np.ndarray) or isinstance(args, list):
+    if (isinstance(args, np.ndarray) or isinstance(args, list)):
         if hasattr(type(args), '__len__'):
             # object is a sequence
             for x in args:
@@ -18,38 +18,46 @@ def count_recursive(args):
 def unpack(args):
     '''Unpacks items in nested np.arrays or lists into a depth-1 list'''
     l = []
+    if (isinstance(args, np.ndarray) or isinstance(args, list)): 
+        if hasattr(type(args), '__len__'):
+            # object is a sequence 
+            for x in args:
+                l += unpack(x)
+        else:
+            l.append(args)
 
-    if hasattr(type(args), '__len__'):
-        # object is a sequence 
-        for x in args:
-            l += unpack(x)
+        return l
     else:
-        l.append(args)
-
-    return l
+        raise TypeError('The input argument should be either np.arrays or list')
 
 def nodify(args, seed):
     '''Recursively transforms all numerical values in np.arrays and lists into Node objects'''
-    i = 0
-    new_args = []
-    for a in args:
-        # TODO: we only support lists and np.arrays at this time
-        def agument(x):
-            # Deferred import to work around circular dependencies
-            from .base import Node
-            nonlocal i
-            node = Node(x, seed[i])
-            i += 1
-            return node
+    if (isinstance(args, np.ndarray) or isinstance(args, list)):
 
-        if isinstance(a, np.ndarray):
-            new_args.append(np.array([agument(x) for x in a]))
-            #code below does not work because vectorize can call agument more than len(a) times
-            #new_args.append(np.vectorize(agument)(a)) 
+        i = 0
+        new_args = []
+        for a in args:
+            # TODO: we only support lists and np.arrays at this time
+            def agument(x):
+                # Deferred import to work around circular dependencies
+                from .base import Node
+                nonlocal i
+                node = Node(x, seed[i])
+                i += 1
+                return node
 
-        elif isinstance(a, list):
-            new_args.append([agument(x) for x in a])
+            if isinstance(a, np.ndarray):
+                new_args.append(np.array([agument(x) for x in a]))
+                #code below does not work because vectorize can call agument more than len(a) times
+                #new_args.append(np.vectorize(agument)(a)) 
 
-        else:
-            new_args.append(agument(a))
-    return new_args
+            elif isinstance(a, list):
+                new_args.append([agument(x) for x in a])
+
+            else:
+                new_args.append(agument(a))
+        return new_args
+    else:
+        raise TypeError('The input argument should be either np.arrays or list')
+
+
