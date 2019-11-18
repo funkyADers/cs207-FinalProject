@@ -84,7 +84,12 @@ class AD():
             # If we assigned a default seed, remove it
             self.seed = None
 
-        return self.f(*new_args)
+        # Replace constants in the output with Node objects
+        out = self.f(*new_args)
+        if hasattr(type(out), '__len__'):
+            return np.array([a if isinstance(a, Node) else Node(a) for a in out])
+        else:
+            return out if isinstance(out, Node) else Node(out)
 
 
 class Node():
@@ -110,6 +115,7 @@ class Node():
 
         #self.prev = []
         #self.next = []
+
 
     def __add__(self, other):
         return addition(self, other)
@@ -149,6 +155,8 @@ class Node():
     def __invert__(self):
         return invert(self)
     def __round__(self, n):
+        if isinstance(n, Node):
+            return _round(self, n.v)
         return _round(self, n)
     def __floor__(self):
         return floor(self)
