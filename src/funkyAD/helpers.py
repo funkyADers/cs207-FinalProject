@@ -4,15 +4,16 @@ import numpy as np
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
     total = 0
-
-    if hasattr(type(args), '__len__'):
-        # object is a sequence 
-        for x in args:
-            total += count_recursive(x)
+    if isinstance(args, np.ndarray) or isinstance(args, list):
+        if hasattr(type(args), '__len__'):
+            # object is a sequence
+            for x in args:
+                total += count_recursive(x)
+        else:
+            total += 1
+        return total
     else:
-        total += 1
-
-    return total
+        raise TypeError('The input argument should be either np.arrays or list')
 
 def unpack(args):
     '''Unpacks items in nested np.arrays or lists into a depth-1 list'''
