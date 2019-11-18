@@ -61,7 +61,17 @@ def r_der(x):
         invalid_op('rounding')
     return 0
 
-_round = BaseFunction(lambda x, n = 0: np.round(x.v, n), lambda x: r_der(x.v))
+def round1(x, n=0):
+    from .base import Node
+    if isinstance(n, Node):
+        n = n.v
+    return np.round(x.v * (10 ** n)) / (10. ** n)
+def round2(x, n=0):
+    from .base import Node
+    if isinstance(n, Node):
+        n = n.v
+    return r_der(x.v * (10 ** n))
+_round = BaseFunction(round1, round2)
 floor = BaseFunction(lambda x: np.floor(x.v), lambda x: r_der(x.v))
 ceil = BaseFunction(lambda x: np.ceil(x.v), lambda x: r_der(x.v))
 trunc = BaseFunction(lambda x: np.trunc(x.v), lambda x: r_der(x.v))
