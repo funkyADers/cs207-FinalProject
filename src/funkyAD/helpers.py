@@ -6,6 +6,8 @@ def count_recursive(args):
     if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, tuple):
     
         pass
+    elif isinstance(args, int) or isinstance(args, float) or isinstance(args, Node):
+        return 1
     else:
         raise TypeError('The input argument should be either np.arrays or list')
     total = count_recursive_recursion_part(args)
@@ -53,7 +55,7 @@ def unpack_recursion_part(args):
 
 def nodify(args, seed):
     '''Recursively transforms all numerical values in np.arrays and lists into Node objects'''
-    if (isinstance(args, np.ndarray) or isinstance(args, list)):
+    if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, tuple):
         pass
     else:
         raise TypeError('The input argument should be either np.arrays or list')
