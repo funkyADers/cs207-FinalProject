@@ -3,11 +3,12 @@ import numpy as np
 
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
+    #deferred import to work around circular dependency
     from .base import Node
-    if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, tuple):
+    if isinstance(args, (np.ndarray, list, tuple)):
     
         pass
-    elif isinstance(args, int) or isinstance(args, float) or isinstance(args, Node):
+    elif isinstance(args, (int, float,Node)):
         return 1
     else:
         raise TypeError('The input argument should be either np.arrays or list')
@@ -27,8 +28,9 @@ def count_recursive_recursion_part(args):
 
 def unpack(args):
     '''Unpacks items in nested np.arrays or lists into a depth-1 list'''
+    #deferred import to work around circular dependency
     from .base import Node
-    if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, Node):
+    if isinstance(args, (np.ndarray, list, Node)):
         pass
     else:
         raise TypeError('The input argument should be either np.arrays or list')
@@ -58,7 +60,7 @@ def unpack_recursion_part(args):
 
 def nodify(args, seed):
     '''Recursively transforms all numerical values in np.arrays and lists into Node objects'''
-    if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, tuple):
+    if isinstance(args, (np.ndarray, list, tuple)):
         pass
     else:
         raise TypeError('The input argument should be either np.arrays or list')
