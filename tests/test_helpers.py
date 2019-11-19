@@ -17,8 +17,9 @@ def test_count_recursive_ndarray():
     assert count_recursive(x)==6
 
 def test_count_recursive_invalid_input():
+    x = "text"
     with pytest.raises(TypeError):
-        count_recursive(6)
+        count_recursive(x)
         
 def test_unpack_2darray():
     x = np.array([[1, 2, 3], [4, 5, 6]], np.int32)
