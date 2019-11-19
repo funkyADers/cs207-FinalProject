@@ -20,6 +20,8 @@ To create a new virtual environment:
 
 Or by cloning the source code and installing that directly:
 
+	git clone git@github.com:funkyADers/cs207-FinalProject.git
+	cd funkyAD
 	pip install -r requirements.txt
 	pip install -e .
 
