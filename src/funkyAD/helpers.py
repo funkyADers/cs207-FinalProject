@@ -5,15 +5,19 @@ def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
     total = 0
     if (isinstance(args, np.ndarray) or isinstance(args, list)):
-        if hasattr(type(args), '__len__'):
-            # object is a sequence
-            for x in args:
-                total += count_recursive(x)
-        else:
-            total += 1
-        return total
+        pass
     else:
         raise TypeError('The input argument should be either np.arrays or list')
+    if hasattr(type(args), '__len__'):
+        # object is a sequence
+        for x in args:
+            total += count_recursive(x)
+    else:
+        total += 1
+    return total
+
+def count_recursive_recursion_part(args):
+
 
 def unpack(args):
     '''Unpacks items in nested np.arrays or lists into a depth-1 list'''
@@ -59,5 +63,6 @@ def nodify(args, seed):
         return new_args
     else:
         raise TypeError('The input argument should be either np.arrays or list')
+
 
 
