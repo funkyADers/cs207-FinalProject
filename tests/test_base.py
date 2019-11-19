@@ -9,7 +9,6 @@ from funkyAD.functions import exp
 
 # test AD class
 def test_AD_string_input():
-    AD('hello')
     with pytest.raises(TypeError):
         AD('hello').grad(1) 
 
@@ -42,6 +41,12 @@ def test_set_seed():
     adobj.set_seed(5)
     adobj.set_seed(0)
     assert adobj.seed == 0
+
+def test_set_seed_wrong_dim():
+    adobj = AD(lambda x: x+5)
+    adobj.set_seed([2,1])
+    with pytest.raises(ValueError):
+        adobj._evaluate(3)
 
 def test_set_seed_nonarray():
     adobj = AD(lambda x: x*x)
@@ -92,6 +97,44 @@ def test_creat_node_deriv():
 
 def test_default_0_deriv(): 
     assert Node(1) == Node(1,0)
+
+def test_radd():
+    assert 2+Node(1,2) == Node(3,2)
+
+def test_rmult():
+    assert 2*Node(2,2) == Node(4,4)
+
+def test_rsub():
+    assert 2-Node(1,2) == Node(1, -2)
+
+def test_rfloordiv():
+    assert 8 //  Node(3, 3) == Node(2, 0)
+
+def test_abs():
+    assert abs(Node(-1, 1)) == Node(1, -1)
+
+def test_ne():
+    assert Node(2,3) != Node(3,2)
+
+def test_lt():
+    assert Node(2,0) <= Node(2,0)
+
+def test_gt():
+    assert Node(3,0) >= Node(1,0)
+ 
+def test_le():
+    assert Node(2,0) < Node(3,-1)
+
+def test_ge():
+    assert Node(2,0) > Node(1,4)
+
+def test_str():
+    n = Node(2,1)
+    assert str(n) == 'Node object with value 2 and derivative 1'
+
+def test_repr():
+    n = Node(2,-1)
+    assert repr(n) == 'Node(2, -1)'
 
 # test grad function (syntatic sugar for AD) 
 def test_grad_new_function():
