@@ -2,25 +2,56 @@ import numpy as np
 
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
+    #deferred import to work around circular dependency
+    from .base import Node
+    if isinstance(args, (np.ndarray, list, tuple)):
+    
+        pass
+    elif isinstance(args, (int, float,Node)):
+        return 1
+    else:
+        raise TypeError('The input argument should be either np.arrays or list')
+    total = count_recursive_recursion_part(args)
+    return total
+    
+def count_recursive_recursion_part(args):
     total = 0
-
     if hasattr(type(args), '__len__'):
-        # object is a sequence 
+        # object is a sequence
+
         for x in args:
-            total += count_recursive(x)
+            total += count_recursive_recursion_part(x)
     else:
         total += 1
-
     return total
 
 def unpack(args):
     '''Unpacks items in nested np.arrays or lists into a depth-1 list'''
+    #deferred import to work around circular dependency
+    from .base import Node
+    if isinstance(args, (np.ndarray, list, Node)):
+        pass
+    else:
+        raise TypeError('The input argument should be either np.arrays or list')
+    
     l = []
-
+      
     if hasattr(type(args), '__len__'):
-        # object is a sequence 
+        # object is a sequence
         for x in args:
-            l += unpack(x)
+            l += unpack_recursion_part(x)
+    else:
+        l.append(args)
+
+    return l
+    
+def unpack_recursion_part(args):
+    l = []
+      
+    if hasattr(type(args), '__len__'):
+        # object is a sequence
+        for x in args:
+            l += unpack_recursion_part(x)
     else:
         l.append(args)
 
@@ -28,6 +59,10 @@ def unpack(args):
 
 def nodify(args, seed):
     '''Recursively transforms all numerical values in np.arrays and lists into Node objects'''
+    if isinstance(args, (np.ndarray, list, tuple)):
+        pass
+    else:
+        raise TypeError('The input argument should be either np.arrays or list')
     i = 0
     new_args = []
     for a in args:
@@ -51,3 +86,4 @@ def nodify(args, seed):
         else:
             new_args.append(agument(a))
     return new_args
+   
