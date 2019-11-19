@@ -3,7 +3,8 @@ import numpy as np
 
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
-    if (isinstance(args, np.ndarray) or isinstance(args, list)):
+    if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, tuple):
+    
         pass
     else:
         raise TypeError('The input argument should be either np.arrays or list')
@@ -44,7 +45,7 @@ def unpack_recursion_part(args):
     if hasattr(type(args), '__len__'):
         # object is a sequence
         for x in args:
-            l += unpack(x)
+            l += unpack_recursion_part(x)
     else:
         l.append(args)
 
