@@ -1,33 +1,28 @@
 # cs207-FinalProject
-CS207 final project
 
 [![Build Status](https://travis-ci.org/funkyADers/cs207-FinalProject.svg?branch=master)](https://travis-ci.org/funkyADers/cs207-FinalProject.svg?branch=master)
 
 [![Coverage Status](https://codecov.io/gh/funkyADers/cs207-FinalProject/branch/master/graph/badge.svg)](https://codecov.io/gh/funkyADers/cs207-FinalProject)
 
-Installation instructions:
+## funkyAD - an autodifferentiation package
+**Group 4**: Anna Zink, Fabio Pruneri, Johannes K. Kolberg, Tyler Yoo
 
-	conda create -n env_name python=3.6 anaconda
+We recommend installing *funkyAD* in a virtual environment, as it depends on a specific version of *Numpy*.
+
+To create a new virtual environment:
+	
+	conda create -n env_name python=3.7 anaconda
 	source activate env_name
+
+*funkyAD* can be installed either using `pip` with PyPi:
+	
+	pip install -i https://test.pypi.org/simple/ funkyAD-funkyADers
+
+Or by cloning the source code and installing that directly:
+
 	pip install -r requirements.txt
-	pip install -i https://test.pypi.org/simple/ funkyAD-funkyADers==0.0.4
+	pip install -e .
 
-Releasing a new version of the package instructions:
+The `-e` flag makes the source code editable without having to reinstall the package from the updated local source code every time. Handy if you wish to add custom functionality or build upon the *funkyAD* source code. Otherwise you can drop the `-e` flag, but note that you will still need the `.` (dot) to install the local source code via `setup.py` in the root directory.
 
-If you have not installed setup tools yet:
-	python3 -m pip install --user --upgrade setuptools wheel
-	python3 -m pip install --user --upgrade twine
-
-Then:
-	Change setup.py to hold new version number
-	python3 setup.py sdist bdist_wheel
-	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-	username: tyleryoo pass: funkyAD207
-	update the version number in README and docs
-	make sure to uninstall the old version (pip uninstall funkyAD-funkyADers) and reinstall the new one before testing
-
-Group no. 4
-Anna Zink
-Johannes K. Kolberg
-Fabio Pruneri
-Tyler Yoo
+See the docs for examples on using *funkyAD* in various applications.
