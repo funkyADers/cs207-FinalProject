@@ -17,6 +17,7 @@ def count_recursive_recursion_part(args):
     total = 0
     if hasattr(type(args), '__len__'):
         # object is a sequence
+
         for x in args:
             total += count_recursive_recursion_part(x)
     else:
@@ -25,7 +26,7 @@ def count_recursive_recursion_part(args):
 
 def unpack(args):
     '''Unpacks items in nested np.arrays or lists into a depth-1 list'''
-    if (isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, Node()):
+    if isinstance(args, np.ndarray) or isinstance(args, list) or isinstance(args, Node()):
         pass
     else:
         raise TypeError('The input argument should be either np.arrays or list')
