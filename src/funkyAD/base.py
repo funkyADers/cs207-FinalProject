@@ -144,7 +144,7 @@ class Node():
         creates a node object with value 4 and derivative [1, 0, 0]
     '''
 
-    def __init__(self, v, d=0.0):
+    def __init__(self, v, d=0):
         self.v = v
         self.d = d # if derivative is none its assumed to be 0 (for constant node)
 
@@ -157,7 +157,7 @@ class Node():
 
         self.parents = None
         self.f = None
-        self.back_g = 0.0 #Backprop gradient
+        self.back_g = 0 #Backprop gradient
 
 
     def __add__(self, other):

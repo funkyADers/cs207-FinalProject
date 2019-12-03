@@ -130,7 +130,7 @@ def test_ge():
 
 def test_str():
     n = Node(2,1)
-    assert str(n) == 'Node object with value 2 and derivative 1'
+    assert str(n) == 'Node object with value 2 and derivative 1 and back-gradient 0'
 
 def test_repr():
     n = Node(2,-1)
