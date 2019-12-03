@@ -89,9 +89,10 @@ class AD():
         # Replace constants in the output with Node objects
         out = self.f(*new_args)
         if hasattr(type(out), '__len__'):
-            return np.array([a if isinstance(a, Node) else Node(a) for a in out])
+            self.output_nodes = np.array([a if isinstance(a, Node) else Node(a) for a in out])
         else:
-            return out if isinstance(out, Node) else Node(out)
+            self.output_nodes = np.array([out]) if isinstance(out, Node) else np.array([Node(out)])
+        return self.output_nodes
 
     def _buildtrace(self, *args):
         
@@ -116,23 +117,41 @@ class AD():
     def _reverse(self, *args):
 
         trace = self._buildtrace(*args)
-        if not trace:
-            raise ValueError("Function has no numeric output")
 
         # Set df/dx_n of the output to 1
-        trace[0].back_g = 1.0
+        self.back_seed = np.eye(len(self.output_nodes))
+        for i, n in enumerate(self.output_nodes):
+            n.back_g = self.back_seed[i]
+
         for n in trace:
             if n.parents:
                 for p in n.parents:
                     # Set derivative of that node to 1
                     p.d = 1.0
-
                     # Increase the gradient of the parent
                     p.back_g += n.back_g * n.f.d(*n.parents)
-
+                    # Put it back so other nodes' computations are not affected
                     p.d = 0.0
 
-        return np.array([x.back_g for x in self.input_nodes])
+        # Unpack input Node objects in case they are contained in an array or similar
+        new_input = []
+        for var in self.input_nodes:
+            if hasattr(type(var), '__len__'):
+                new_input += [x for x in var]
+            else:
+                new_input.append(var)
+
+        for n in new_input:
+            # If input node does not influence the output, its gradient has to be
+            #  manually set to ahve the correct size
+            try:
+                if n.back_g == 0:
+                    n.back_g = np.zeros(len(self.output_nodes))
+            except:
+                pass
+
+        # Return the transpose for (obvious?) mathematical reasons
+        return np.array([x.back_g for x in new_input]).T
 
 class Node():
     '''Represents a Node in the evaluation graph. Holds its value and derivative. 
