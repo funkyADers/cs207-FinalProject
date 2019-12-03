@@ -38,7 +38,7 @@ class AD():
 
     def grad(self, *args):
         '''Returns the gradient of the function evaluated on the arguments given'''
-        out_nodes = self._evaluate(*args)
+        out_nodes = self._forward(*args)
         return np.array([node.d for node in unpack(out_nodes)])
 
     def set_seed(self, seed):
@@ -55,7 +55,7 @@ class AD():
         if len(self.seed) != l:
             raise ValueError("Seed dimension does not match input dimension")
 
-    def _evaluate(self, *args):
+    def _forward(self, *args):
         '''Main algorithm for the forward pass. Calls helpers as appropriate.'''
 
         # Compute number of inputs
@@ -80,6 +80,7 @@ class AD():
 
         # Make all arguments Node objects
         new_args = nodify(args, self.seed)
+        self.input_nodes = new_args
 
         if default_seed:
             # If we assigned a default seed, remove it
@@ -94,33 +95,44 @@ class AD():
 
     def _buildtrace(self, *args):
         
-        # Try to evaluate the function
-        try:
-            output = self.f(*args)
-        except:
-            raise TypeError('function and *args are not callable')         
-
-        # Make all arguments Node objects 
-        #  BUT: set derivatives to 0 since we're not computing the gradient yet
-        new_args = nodify(args, [0 for _ in range(count_recursive(args))])
-
-        # Forward pass
-        out = self.f(*new_args)
+        # Store previous seed in a temp value, set seed to 0
+        temp, self.seed = self.seed, [0 for _ in range(count_recursive(args))]
+        out = self._forward(*args)
+        # Put it back
+        self.seed = temp
 
         trace = []
 
         # Nodify (not sure if this step is actually necessary)
         if hasattr(type(out), '__len__'):
-            new_out = [a if isinstance(a, Node) else Node(a) for a in out]
-            for a in new_out:
+            for a in out:
                 recursive_append(a, trace)
         else:
-            new_out = out if isinstance(out, Node) else Node(out)
-            recursive_append(new_out, trace)
+            recursive_append(out, trace)
 
         self.trace = trace
         return trace
 
+    def _reverse(self, *args):
+
+        trace = self._buildtrace(*args)
+        if not trace:
+            raise ValueError("Function has no numeric output")
+
+        # Set df/dx_n of the output to 1
+        trace[0].back_g = 1.0
+        for n in trace:
+            if n.parents:
+                for p in n.parents:
+                    # Set derivative of that node to 1
+                    p.d = 1.0
+
+                    # Increase the gradient of the parent
+                    p.back_g += n.back_g * n.f.d(*n.parents)
+
+                    p.d = 0.0
+
+        return np.array([x.back_g for x in self.input_nodes])
 
 class Node():
     '''Represents a Node in the evaluation graph. Holds its value and derivative. 
@@ -132,7 +144,7 @@ class Node():
         creates a node object with value 4 and derivative [1, 0, 0]
     '''
 
-    def __init__(self, v, d=0):
+    def __init__(self, v, d=0.0):
         self.v = v
         self.d = d # if derivative is none its assumed to be 0 (for constant node)
 
@@ -145,6 +157,7 @@ class Node():
 
         self.parents = None
         self.f = None
+        self.back_g = 0.0 #Backprop gradient
 
 
     def __add__(self, other):
@@ -219,7 +232,8 @@ class Node():
         raise NotImplementedError("Complex numbers are not supported")
         
     def __str__(self):
-        return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
+        return "Node object with value " + str(self.v) + " and derivative " + str(self.d) +\
+                " and back-gradient " + str(self.back_g)
 
     def __repr__(self):
         return "Node(" + str(self.v) + ", " + str(self.d) + ")"
