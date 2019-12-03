@@ -1,7 +1,22 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
+from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan, round1, round2
+
+# BaseFunction
+def test_define_basefunction():
+    # Try both lambda and custom function
+    def my_derivative(x, y):
+        return x * y
+    new_func = BaseFunction(lambda x, y: x.v + y.v, my_derivative)
+
+def test_use_new_basefunction():
+    new_func = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d * y.d)
+    assert new_func(Node(1, 2), Node(3, 4)) == Node(4, 8)
+
+def test_invalid_op():
+    with pytest.raises(ValueError):
+        invalid_op('test_call')
 
 # Only need one overload test each; if that works, all other variations will too
 
