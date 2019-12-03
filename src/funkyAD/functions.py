@@ -63,16 +63,20 @@ def r_der(x):
         invalid_op('rounding')
     return 0
 
+# Rounding the value of a node with specified digits
 def round1(x, n=0):
     from .base import Node
     if isinstance(n, Node):
         n = n.v
     return np.round(x.v * (10 ** n)) / (10. ** n)
+
+# Roundin the derivative of a node with specified digits
 def round2(x, n=0):
     from .base import Node
     if isinstance(n, Node):
         n = n.v
     return r_der(x.v * (10 ** n))
+
 _round = BaseFunction(round1, round2)
 floor = BaseFunction(lambda x: np.floor(x.v), lambda x: r_der(x.v))
 ceil = BaseFunction(lambda x: np.ceil(x.v), lambda x: r_der(x.v))
@@ -84,6 +88,3 @@ exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))
 tan = BaseFunction(lambda x: np.tan(x.v), lambda x: x.d / (np.cos(x.v) ** 2))
-
-#if __name__ == '__main__':
-#    print(exp(Node(1, 2)))
