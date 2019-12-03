@@ -94,6 +94,10 @@ def test_sign():
     assert sign(-5) == sign(-2.3) == -1
     assert sign(5) == sign(2.3) == 1
 
+def test_sign_abs():
+    with pytest.raises(ValueError):
+        sign(0)
+
 def test_r_der_nonint():
     assert r_der(5.5) == 0
     assert r_der(-1.3) == 0
