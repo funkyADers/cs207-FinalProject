@@ -86,4 +86,11 @@ def nodify(args, seed):
         else:
             new_args.append(agument(a))
     return new_args
-   
+
+def recursive_append(n, trace):
+    # appends a node and all its parents to trace by recursing
+    trace.append(n)
+    if n.parents is not None:
+        for p in n.parents:
+            recursive_append(p, trace)
+
