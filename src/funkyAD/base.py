@@ -1,6 +1,6 @@
 import numpy as np
 from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, floordiv, _round, floor, ceil, trunc
-from .helpers import count_recursive, nodify, unpack
+from .helpers import count_recursive, nodify, unpack, recursive_append
 
 class AD():
     '''Wraps a function to access Automatic Differentiation methods.
@@ -34,6 +34,7 @@ class AD():
         self.seed = None
         self.n = None
         self.m = None
+        self.trace = None
 
     def grad(self, *args):
         '''Returns the gradient of the function evaluated on the arguments given'''
@@ -91,6 +92,35 @@ class AD():
         else:
             return out if isinstance(out, Node) else Node(out)
 
+    def _buildtrace(self, *args):
+        
+        # Try to evaluate the function
+        try:
+            output = self.f(*args)
+        except:
+            raise TypeError('function and *args are not callable')         
+
+        # Make all arguments Node objects 
+        #  BUT: set derivatives to 0 since we're not computing the gradient yet
+        new_args = nodify(args, [0 for _ in range(count_recursive(args))])
+
+        # Forward pass
+        out = self.f(*new_args)
+
+        trace = []
+
+        # Nodify (not sure if this step is actually necessary)
+        if hasattr(type(out), '__len__'):
+            new_out = [a if isinstance(a, Node) else Node(a) for a in out]
+            for a in new_out:
+                recursive_append(a, trace)
+        else:
+            new_out = out if isinstance(out, Node) else Node(out)
+            recursive_append(new_out, trace)
+
+        self.trace = trace
+        return trace
+
 
 class Node():
     '''Represents a Node in the evaluation graph. Holds its value and derivative. 
@@ -113,8 +143,8 @@ class Node():
         except:
             raise TypeError('Value and derivative must be numeric.')
 
-        #self.prev = []
-        #self.next = []
+        self.parents = None
+        self.f = None
 
 
     def __add__(self, other):

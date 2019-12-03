@@ -27,6 +27,8 @@ class BaseFunction():
         new_args = [a if isinstance(a, Node) else Node(a) for a in args]
 
         new = Node(self.f(*new_args), self.d(*new_args))
+        new.f = self
+        new.parents = new_args
 
         return new
 
