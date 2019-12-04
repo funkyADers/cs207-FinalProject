@@ -112,33 +112,33 @@ def base_check(f):
 
 # Value of exponentials
 @base_check
-def exp1(x, base = np.e):
+def exp1(x, b = np.e):
     # np.exp(2) != np.e**2 --> latter more precise
-    if base == np.e:
+    if b == np.e:
         # Hence, for consistency with usage of np.exp():
         return np.exp(x.v)
     else:
-        return base ** x.v
+        return b ** x.v
 
 # Derivative of exponentials
 @base_check
-def exp2(x, base = np.e):
-    if base == np.e:
+def exp2(x, b = np.e):
+    if b == np.e:
         return x.d * np.exp(x.v)
     else:
-        return x.d * np.log(base) * base ** x.v
+        return x.d * np.log(b) * b ** x.v
 
 exp = BaseFunction(exp1, exp2)
 #exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 
 @base_check
-def log1(x, base = np.e):
+def log1(x, b = np.e):
     # np.log(np.e) == 1
-    return np.log(x.v) / np.log(base)
+    return np.log(x.v) / np.log(b)
 
 @base_check
-def log2(x, base = np.e):
-    return x.d / (x.v * np.log(base))
+def log2(x, b = np.e):
+    return x.d / (x.v * np.log(b))
 
 log = BaseFunction(log1, log2)
 

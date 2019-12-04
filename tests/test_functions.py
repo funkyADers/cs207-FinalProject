@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, sin, cos, tan
+from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, log, sin, cos, tan
 
 # BaseFunction
 def test_define_basefunction():
@@ -213,6 +213,19 @@ def test_exp_type():
 def test_exp_invalid():
     with pytest.raises(ValueError):
         exp(Node(1,2), -2)
+
+def test_log_natural():
+    # Full node
+    assert log(Node(np.exp(2), 4)) == Node(2, 4/np.exp(2))
+    # Constant
+    assert log(np.exp(2)) == Node(2, 0)
+
+def test_log_general():
+    # Node with custom base
+    assert log(Node(8, 4), 2) == Node(3, 0.5/np.log(2))
+    assert log(Node(9, 27), 3) == Node(2, 3/np.log(3))
+    # Constant with custom base
+    assert log(4, 2) == Node(2, 0)
 
 def test_sin():
     assert sin(Node(2, 3)) == Node(np.sin(2), 3*np.cos(2))
