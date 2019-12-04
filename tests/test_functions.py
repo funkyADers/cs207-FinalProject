@@ -94,6 +94,7 @@ def test_power():
 
 def test_sqrt():
     assert sqrt(Node(2, 3)) == Node(2**0.5, 3/(2*2**0.5))
+    assert sqrt(2) == Node(2**0.5, 0)
 
 def test_pos():
     assert pos(Node(1, 2)) == Node(1, 2)
@@ -182,6 +183,7 @@ def test_trunc_undefined():
     with pytest.raises(ValueError):
         trunc(Node(1, 1))
 
+# Natural exponential: using default base = np.e
 def test_exp():
     # Nodes
     assert exp(Node(2, 0)) == Node(np.exp(2), 0)
@@ -190,6 +192,22 @@ def test_exp():
     # Constants
     assert exp(1) == Node(np.exp(1), 0)
     assert exp(-1) == Node(np.exp(-1), 0)
+
+# General exponential, base != np.e
+def test_exp_general():
+    # Node and constant
+    assert exp(Node(2, 3), 2) == Node(2**2, 3*np.log(2)*2**2)
+    # Node and base as Node
+    assert exp(Node(2, 3), Node(2, 3)) == Node(2**2, 3*np.log(2)*2**2)
+    
+def test_exp_type():
+    # Type checking still handled by Node constructor, but verify it works
+    with pytest.raises(TypeError):
+        exp(Node(1,2), 'base2')
+
+def test_exp_invalid():
+    with pytest.raises(ValueError):
+        exp(Node(1,2), -2)
 
 def test_sin():
     assert sin(Node(2, 3)) == Node(np.sin(2), 3*np.cos(2))

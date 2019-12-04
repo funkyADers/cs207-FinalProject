@@ -92,8 +92,33 @@ trunc = BaseFunction(lambda x: np.trunc(x.v), lambda x: r_der(x.v))
 
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
+# Exponentials, value
+def exp1(x, base = np.e):
+    from .base import Node
+    if isinstance(base, Node):
+        base = base.v
+    # np.exp(2) != np.e**2 --> latter more precise
+    if base == np.e:
+        # Hence, for consistency with usage of np.exp():
+        return np.exp(x.v)
+    else:
+        return base ** x.v
+
+# Exponentials, derivative
+def exp2(x, base = np.e):
+    from .base import Node
+    if isinstance(base, Node): base = base.v
+    if base <= 0: raise ValueError('Base must be positive')
+    if base == np.e:
+        # Again, for consistency
+        return x.d * np.exp(x.v)
+    else:
+        return x.d * np.log(base) * base ** x.v
+
+exp = BaseFunction(exp1, exp2)
+#exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
+
 # Trigonometric functions
-exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))
 tan = BaseFunction(lambda x: np.tan(x.v), lambda x: x.d / (np.cos(x.v) ** 2))
