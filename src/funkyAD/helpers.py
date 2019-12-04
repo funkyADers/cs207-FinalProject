@@ -5,9 +5,8 @@ def count_recursive(args):
     #deferred import to work around circular dependency
     from .base import Node
     if isinstance(args, (np.ndarray, list, tuple)):
-    
         pass
-    elif isinstance(args, (int, float,Node)):
+    elif isinstance(args, (int, float, Node, np.int64)):
         return 1
     else:
         raise TypeError('The input argument should be either np.arrays or list')

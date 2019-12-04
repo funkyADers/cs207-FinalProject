@@ -24,7 +24,7 @@ def test_constant_function():
 def test_no_args():
     adobj = AD(lambda x: x)
     with pytest.raises(TypeError):
-        adobj._evaluate()
+        adobj._forward()
 
 def test_usage_example(): 
     def f(x):
@@ -46,7 +46,7 @@ def test_set_seed_wrong_dim():
     adobj = AD(lambda x: x+5)
     adobj.set_seed([2,1])
     with pytest.raises(ValueError):
-        adobj._evaluate(3)
+        adobj._forward(3)
 
 def test_set_seed_nonarray():
     adobj = AD(lambda x: x*x)
@@ -62,7 +62,7 @@ def test_check_seed():
 
 def test_self_n(): 
     adobj = AD(lambda x,y: x+y)
-    adobj._evaluate(1,2)
+    adobj._forward(1,2)
     assert adobj.n == 2
 
 def test_multidim_n(): 
@@ -79,7 +79,7 @@ def test_multidim_m():
 
 def test_self_m(): 
     adobj = AD(lambda x,y: x**2 + y+y)
-    adobj._evaluate(0,0)
+    adobj._forward(0,0)
     assert adobj.m == 1
 
 # test Node class - overload tests in test-functions.py 
@@ -130,7 +130,7 @@ def test_ge():
 
 def test_str():
     n = Node(2,1)
-    assert str(n) == 'Node object with value 2 and derivative 1'
+    assert str(n) == 'Node object with value 2 and derivative 1 and back-gradient 0'
 
 def test_repr():
     n = Node(2,-1)
