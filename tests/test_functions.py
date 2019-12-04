@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
+from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
 
 # BaseFunction
 def test_define_basefunction():
@@ -79,7 +79,10 @@ def test_floordivision():
 
 def test_power():
     # Two nodes via function call
+    ## 3*(2**2)*2
     assert power(Node(2, 2), Node(3, 3)) == Node(8, 24)
+    # Node and constant
+    assert power(Node(2, 2), 3) == Node(8, 24)
     # Two nodes via overload
     assert Node(2, 2) ** Node(3, 3) == Node(8, 24)
     # Two constants via function call
@@ -88,6 +91,9 @@ def test_power():
     assert Node(3, 3) ** 2 == Node(9, 18)
     # Negative power (not invert, but chain rule)
     assert Node(2, 3) ** -2 == Node(0.25, -0.75)
+
+def test_sqrt():
+    assert sqrt(Node(2, 3)) == Node(2**0.5, 3/(2*2**0.5))
 
 def test_pos():
     assert pos(Node(1, 2)) == Node(1, 2)

@@ -38,7 +38,10 @@ subtraction = BaseFunction(lambda x, y: x.v - y.v, lambda x, y: x.d - y.d)
 multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
 # Quotient rule
 division = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
+
 power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
+sqrt = BaseFunction(lambda x: x.v**0.5, lambda x: x.d / (2*x.v**0.5))
+
 pos = BaseFunction(lambda x: +x.v, lambda x: +x.d)
 # Negation (or taking the negative of, i.e. changing sign)
 neg = BaseFunction(lambda x: -x.v, lambda x: -x.d)
