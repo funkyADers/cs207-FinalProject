@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
+from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, sin, cos, tan
 
 # BaseFunction
 def test_define_basefunction():
@@ -182,6 +182,11 @@ def test_trunc():
 def test_trunc_undefined():
     with pytest.raises(ValueError):
         trunc(Node(1, 1))
+
+def test_base_check():
+    check = base_check(np.log)
+    with pytest.raises(ValueError):
+        check(Node(1, 2), -2)
 
 # Natural exponential: using default base = np.e
 def test_exp():

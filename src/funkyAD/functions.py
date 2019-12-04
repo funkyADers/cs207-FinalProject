@@ -98,11 +98,21 @@ floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 # so for them to give expected results (e.g. tests on values) we
 # need to use np.exp() when applicable, and manual ** otherwise
 
+# Decorator to verify valid base of exponentiation or logarithm
+def base_check(f):
+    def inner(x, b = np.e):
+        from .base import Node
+        if isinstance(b, Node):
+            b = b.v
+        if b <= 0:
+            raise ValueError('Base must be positive')
+        else:
+            return f(x, b)
+    return inner
+
 # Value of exponentials
+@base_check
 def exp1(x, base = np.e):
-    from .base import Node
-    if isinstance(base, Node):
-        base = base.v
     # np.exp(2) != np.e**2 --> latter more precise
     if base == np.e:
         # Hence, for consistency with usage of np.exp():
@@ -111,20 +121,27 @@ def exp1(x, base = np.e):
         return base ** x.v
 
 # Derivative of exponentials
+@base_check
 def exp2(x, base = np.e):
-    from .base import Node
-    if isinstance(base, Node): 
-        base = base.v
-    if base <= 0: 
-        raise ValueError('Base must be positive')
     if base == np.e:
-        # Again, for consistency
         return x.d * np.exp(x.v)
     else:
         return x.d * np.log(base) * base ** x.v
 
 exp = BaseFunction(exp1, exp2)
 #exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
+
+@base_check
+def log1(x, base = np.e):
+    # np.log(np.e) == 1
+    return np.log(x.v) / np.log(base)
+
+@base_check
+def log2(x, base = np.e):
+    return x.d / (x.v * np.log(base))
+
+log = BaseFunction(log1, log2)
+
 
 # Trigonometric functions
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
