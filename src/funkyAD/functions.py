@@ -92,7 +92,13 @@ trunc = BaseFunction(lambda x: np.trunc(x.v), lambda x: r_der(x.v))
 
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
-# Exponentials, value
+# np.e**2 != np.exp(2), the former is slightly more precise
+# math.e**2 != np.exp(2), same
+# Most applications of exponents use np.exp(x) rather than np.e**x,
+# so for them to give expected results (e.g. tests on values) we
+# need to use np.exp() when applicable, and manual ** otherwise
+
+# Value of exponentials
 def exp1(x, base = np.e):
     from .base import Node
     if isinstance(base, Node):
@@ -104,7 +110,7 @@ def exp1(x, base = np.e):
     else:
         return base ** x.v
 
-# Exponentials, derivative
+# Derivative of exponentials
 def exp2(x, base = np.e):
     from .base import Node
     if isinstance(base, Node): base = base.v

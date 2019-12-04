@@ -8,7 +8,7 @@ def test_define_basefunction():
     # Try both lambda and custom function
     def my_derivative(x, y):
         return x * y
-    new_func = BaseFunction(lambda x, y: x.v + y.v, my_derivative)
+    BaseFunction(lambda x, y: x.v + y.v, my_derivative)
 
 def test_use_new_basefunction():
     new_func = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d * y.d)
