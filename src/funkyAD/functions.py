@@ -33,10 +33,14 @@ class BaseFunction():
         return new
 
 addition = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
+subtraction = BaseFunction(lambda x, y: x.v - y.v, lambda x, y: x.d - y.d)
+# Product rule
 multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
+# Quotient rule
 division = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
 power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
 pos = BaseFunction(lambda x: +x.v, lambda x: +x.d)
+# Negation (or taking the negative of, i.e. changing sign)
 neg = BaseFunction(lambda x: -x.v, lambda x: -x.d)
 
 # Function to raise error if function is non-differentiable
@@ -77,6 +81,7 @@ def round2(x, n=0):
         n = n.v
     return r_der(x.v * (10 ** n))
 
+# Rounding
 _round = BaseFunction(round1, round2)
 floor = BaseFunction(lambda x: np.floor(x.v), lambda x: r_der(x.v))
 ceil = BaseFunction(lambda x: np.ceil(x.v), lambda x: r_der(x.v))
@@ -84,6 +89,7 @@ trunc = BaseFunction(lambda x: np.trunc(x.v), lambda x: r_der(x.v))
 
 floordiv = BaseFunction(lambda x, y: x.v // y.v, lambda x, y: r_der(x.v / y.v))
 
+# Trigonometric functions
 exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))

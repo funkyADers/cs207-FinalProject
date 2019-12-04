@@ -35,6 +35,17 @@ def test_addition():
     # Node and constant
     assert addition(Node(1, 2), 2) == Node(3, 2)
 
+# Subtraction implemented indirectly by combining addition and negation
+def test_subtraction():
+    # Two nodes via function call
+    assert addition(Node(3, 4), -Node(1, 2)) == Node(2, 2)
+    # Two nodes via overload
+    assert Node(3, 4) - Node(1, 2) == Node(2, 2)
+    # Two constants via function call
+    assert addition(2, -1) == Node(1, 0)
+    # Node and constant
+    assert addition(Node(3, 2), -2) == Node(1, 2)
+
 def test_multiplication():
     # Two nodes via function call
     assert multiplication(Node(1, 2), Node(3, 4)) == Node(3, 10)
@@ -84,7 +95,8 @@ def test_pos():
     assert pos(2) == Node(2, 0)
     assert pos(-2) == Node(-2, 0)
     
-def test_neg():
+# Test negative (negation)
+def test_negation():
     assert neg(Node(1, 2)) == Node(-1, -2)
     assert neg(Node(-1, -2)) == Node(1, 2)
     assert neg(2) == Node(-2, 0)
