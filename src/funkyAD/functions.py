@@ -147,3 +147,15 @@ log = BaseFunction(log1, log2)
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))
 tan = BaseFunction(lambda x: np.tan(x.v), lambda x: x.d / (np.cos(x.v) ** 2))
+
+# Hyperbolic functions
+# Note: can implement manually using natural exponential, but similarly to before
+# using np.exp() vs Numpy's hyperbolic functions directly give very slightly
+# different results in the 14th or so decimal, so == comparisons yield false
+# E.g. manual sinh = 3.626860407847019, while np.sinh = 3.6268604078470186
+# Since most users presumably use np.sinh or similar, we implement using that
+# Otherwise their tests may fail
+
+sinh = BaseFunction(lambda x: np.sinh(x.v), lambda x: x.d*np.cosh(x.v))
+cosh = BaseFunction(lambda x: np.cosh(x.v), lambda x: x.d*np.sinh(x.v))
+tanh = BaseFunction(lambda x: np.tanh(x.v), lambda x: x.d/(np.cosh(x.v)**2))
