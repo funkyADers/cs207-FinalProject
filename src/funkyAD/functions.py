@@ -113,8 +113,10 @@ def exp1(x, base = np.e):
 # Derivative of exponentials
 def exp2(x, base = np.e):
     from .base import Node
-    if isinstance(base, Node): base = base.v
-    if base <= 0: raise ValueError('Base must be positive')
+    if isinstance(base, Node): 
+        base = base.v
+    if base <= 0: 
+        raise ValueError('Base must be positive')
     if base == np.e:
         # Again, for consistency
         return x.d * np.exp(x.v)
