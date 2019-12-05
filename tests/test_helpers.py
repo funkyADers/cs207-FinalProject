@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from funkyAD.helpers import count_recursive, unpack, nodify
+from funkyAD.helpers import count_recursive, unpack, nodify, recursive_append
 from funkyAD.base import Node
 
 
