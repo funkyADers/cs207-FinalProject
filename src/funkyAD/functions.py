@@ -106,8 +106,7 @@ def base_check(f):
             b = b.v
         if b <= 0:
             raise ValueError('Base must be positive')
-        else:
-            return f(x, b)
+        return f(x, b)
     return inner
 
 # Value of exponentials
@@ -145,13 +144,34 @@ log = BaseFunction(log1, log2)
 
 # Trigonometric functions
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
-arcsin = BaseFunction(lambda x: np.arcsin(x.v), lambda x: x.d/np.sqrt(1 - x.v**2))
-
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))
-arccos = BaseFunction(lambda x: np.arccos(x.v), lambda x: -x.d / np.sqrt(1 - x.v**2))
-
 tan = BaseFunction(lambda x: np.tan(x.v), lambda x: x.d / (np.cos(x.v) ** 2))
-arctan = BaseFunction(lambda x: np.arctan(x.v), lambda x: x.d / (1 + x.v**2))
+
+# Complex numbers are not supported: verify inv angle in valid range
+def one_check(f):
+    def inner(x):
+        from .base import Node
+        if isinstance(x, Node):
+            val = x.v
+        else:
+            val = x
+        if not np.abs(val) < 1:
+            raise ValueError('Angle must be between -1 and 1 exclusive')
+        return f(x)
+    return inner
+
+arcsin = BaseFunction(
+    one_check(lambda x: np.arcsin(x.v)), 
+    one_check(lambda x: x.d/np.sqrt(1 - x.v**2))
+)
+arccos = BaseFunction(
+    one_check(lambda x: np.arccos(x.v)), 
+    one_check(lambda x: -x.d / np.sqrt(1 - x.v**2))
+)
+arctan = BaseFunction(
+    one_check(lambda x: np.arctan(x.v)), 
+    one_check(lambda x: x.d / (1 + x.v**2))
+)
 
 # Hyperbolic functions
 # Note: can implement manually using natural exponential, but similarly to before

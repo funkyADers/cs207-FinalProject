@@ -235,6 +235,14 @@ def test_arcsin():
     assert arcsin(Node(0.5, 1.5)) == Node(np.arcsin(0.5), 1.5/np.sqrt(1 - 0.5**2))
     assert arcsin(0.75) == Node(np.arcsin(0.75), 0)
 
+def test_inv_trig_invalid():
+    with pytest.raises(ValueError):
+        arcsin(1.5)
+    with pytest.raises(ValueError):
+        arccos(1.5)
+    with pytest.raises(ValueError):
+        arctan(1.5)
+
 def test_cos():
     assert cos(Node(2, 3)) == Node(np.cos(2), -3*np.sin(2))
     assert cos(2) == Node(np.cos(2), 0)
