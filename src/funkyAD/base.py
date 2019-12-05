@@ -26,9 +26,7 @@ class AD():
     '''
 
     def __init__(self, f):
-        try:
-            callable(f)
-        except: 
+        if not callable(f):
             raise TypeError('The input function to AD must be callable')
         self.f = f
         self.seed = None
@@ -191,10 +189,19 @@ class Node():
         return multiplication(self, other)
     def __rmul__(self, other):
         return multiplication(self, other)
+
+    def __iadd__(self,other):
+        raise NotImplementedError()
+    def __isub__(self,other):
+        raise NotImplementedError()
+    def __imul__(self,other):
+        raise NotImplementedError()
+    def __idiv__(self,other):
+        raise NotImplementedError()
+
     def __pow__(self, other):
         return power(self, other)
     def __rpow__(self, other):
-        ## TODO
         raise NotImplementedError()
     def __floordiv__(self, other):
         return floordiv(self, other)
@@ -204,10 +211,6 @@ class Node():
         return division(self, other)
     def __rtruediv__(self, other):
         return division(other, self)
-
-    # TODO
-    #def __iadd__(self, other): etc
-
     def __pos__(self):
         return pos(self)
     def __neg__(self):
@@ -240,13 +243,6 @@ class Node():
         return self.v.__le__(other.v)
     def __ge__(self, other):
         return self.v.__ge__(other.v)
-
-    def __int__(self):
-        return self.__floor__()
-    def __long__(self):
-        return self.__floor__()   
-    def __float__(self):
-        return self
     def __complex__(self):
         raise NotImplementedError("Complex numbers are not supported")
         
