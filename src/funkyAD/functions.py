@@ -184,3 +184,14 @@ arctan = BaseFunction(
 sinh = BaseFunction(lambda x: np.sinh(x.v), lambda x: x.d*np.cosh(x.v))
 cosh = BaseFunction(lambda x: np.cosh(x.v), lambda x: x.d*np.sinh(x.v))
 tanh = BaseFunction(lambda x: np.tanh(x.v), lambda x: x.d/(np.cosh(x.v)**2))
+
+# General logistic function
+# Many ways of defining it, we do it using L(x) = upper_bound/(1+rate*exp(-x))
+logistic = BaseFunction(
+    lambda x, u, r: u.v/(1+r.v*np.exp(-x.v)), 
+    lambda x, u, r: x.d*u.v*r.v*np.exp(x.v)/(r.v + np.exp(x.v))**2
+)
+
+# Sigmoid: specific case of logistic used for neural nets
+sigmoid = BaseFunction(
+    lambda x: 1/(1+np.exp(-x.v)), lambda x: x.d*np.exp(x.v)/(1+np.exp(x.v))**2)

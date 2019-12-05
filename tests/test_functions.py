@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, log, sin, cos, tan, sinh, cosh, tanh, arcsin, arccos, arctan
+from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, log, sin, cos, tan, sinh, cosh, tanh, arcsin, arccos, arctan, one_check, logistic, sigmoid
 
 # BaseFunction
 def test_define_basefunction():
@@ -243,6 +243,11 @@ def test_inv_trig_invalid():
     with pytest.raises(ValueError):
         arctan(1.5)
 
+def test_one_check():
+    check = one_check(lambda x: x**2)
+    with pytest.raises(ValueError):
+        check(Node(1.5, 1.5))
+
 def test_cos():
     assert cos(Node(2, 3)) == Node(np.cos(2), -3*np.sin(2))
     assert cos(2) == Node(np.cos(2), 0)
@@ -270,3 +275,10 @@ def test_cosh():
 def test_tanh():
     assert tanh(Node(2, 3)) == Node(np.tanh(2), 3/((np.cosh(2)**2)))
     assert tanh(2) == Node(np.tanh(2), 0)
+
+def test_logistic():
+    assert logistic(Node(2, 3), 10, 100) == Node(10/(1+100*np.exp(-2)), 3*10*100*np.exp(2)/(100+np.exp(2))**2)
+
+def test_sigmoid():
+    assert sigmoid(Node(2, 3)) == Node(1/(1+np.exp(-2)), 3*np.exp(2)/(1+np.exp(2))**2)
+    assert sigmoid(2) == Node(1/(1+np.exp(-2)), 0)
