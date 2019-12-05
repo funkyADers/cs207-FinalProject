@@ -39,15 +39,37 @@ def test_trace():
     trace = adobj._buildtrace(1,2)
     assert len(trace)==3 
 
+def test_trace_1dim():
+    adobj = AD(lambda x: 3)
+    trace = adobj._buildtrace(2)
+    assert len(trace)==1
+
 def test_reverse():
     def f(x):
         return x**2
     assert AD(f)._reverse(2)==[[4]]
 
-def test_reverse_multidim():
+def test_reverse_multidim_n():
     adobj = AD(lambda x,y: x**2+2*y)
     truth = [[4, 2]]
     assert (adobj._reverse(2,1) == truth).all()
+
+def test_reverse_multidim_n():
+    adobj = AD(lambda x,y: x**2+2*y)
+    truth = [[4, 2]]
+    assert (adobj._reverse(2,1) == truth).all()
+
+def test_reverse_multidim_m(): 
+    adobj = AD(lambda x,y: [x+y, x**2])
+    grad = adobj._reverse(1,1)
+    truth = [[1,1],[2,0]]
+    assert (grad == truth).all()
+
+def test_reverse_noinfl_in():
+    adobj = AD(lambda x,y: x**2 + x)
+    grad = adobj._reverse(1,1) 
+    truth = [[3,0]]
+    assert (grad == truth).all()
 
 def test_set_seed():
     adobj = AD(lambda x: x+5)
@@ -148,6 +170,7 @@ def test_invert():
 
 def test_round():
     assert round(Node(2.2, 3.2),0) == Node(2, 0)
+    assert round(Node(2.2, 3.2), Node(0,0)) == Node(2, 0)
 
 def test_floor(): 
     assert floor(Node(3.3, 3)) == Node(3,0)
