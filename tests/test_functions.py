@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from funkyAD.base import Node
-from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, log, sin, cos, tan
+from funkyAD.functions import BaseFunction, invalid_op, addition, multiplication, division, floordiv, power, sqrt, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, base_check, exp, log, sin, cos, tan, sinh, cosh, tanh, arcsin, arccos, arctan
 
 # BaseFunction
 def test_define_basefunction():
@@ -231,10 +231,34 @@ def test_sin():
     assert sin(Node(2, 3)) == Node(np.sin(2), 3*np.cos(2))
     assert sin(2) == Node(np.sin(2), 0)
 
+def test_arcsin():
+    assert arcsin(Node(0.5, 1.5)) == Node(np.arcsin(0.5), 1.5/np.sqrt(1 - 0.5**2))
+    assert arcsin(0.75) == Node(np.arcsin(0.75), 0)
+
 def test_cos():
     assert cos(Node(2, 3)) == Node(np.cos(2), -3*np.sin(2))
     assert cos(2) == Node(np.cos(2), 0)
 
+def test_arccos():
+    assert arccos(Node(0.5, 2)) == Node(np.arccos(0.5), -(2 / np.sqrt(1 - 0.5**2)))
+    assert arccos(0.85) == Node(np.arccos(0.85), 0)
+
 def test_tan():
     assert tan(Node(2, 3)) == Node(np.tan(2), 3/np.cos(2)**2)
     assert tan(2) == Node(np.tan(2), 0)
+
+def test_arcan():
+    assert arctan(Node(0.5, 2)) == Node(np.arctan(0.5), 2/(1+0.5**2))
+    assert arctan(0.5) == Node(np.arctan(0.5), 0)
+
+def test_sinh():
+    assert sinh(Node(2, 3)) == Node(np.sinh(2), 3*np.cosh(2))
+    assert sinh(2) == Node(np.sinh(2), 0)
+
+def test_cosh():
+    assert cosh(Node(2, 3)) == Node(np.cosh(2), 3*np.sinh(2))
+    assert cosh(2) == Node(np.cosh(2), 0)
+
+def test_tanh():
+    assert tanh(Node(2, 3)) == Node(np.tanh(2), 3/((np.cosh(2)**2)))
+    assert tanh(2) == Node(np.tanh(2), 0)

@@ -145,8 +145,13 @@ log = BaseFunction(log1, log2)
 
 # Trigonometric functions
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
+arcsin = BaseFunction(lambda x: np.arcsin(x.v), lambda x: x.d/np.sqrt(1 - x.v**2))
+
 cos = BaseFunction(lambda x: np.cos(x.v), lambda x: -x.d * np.sin(x.v))
+arccos = BaseFunction(lambda x: np.arccos(x.v), lambda x: -x.d / np.sqrt(1 - x.v**2))
+
 tan = BaseFunction(lambda x: np.tan(x.v), lambda x: x.d / (np.cos(x.v) ** 2))
+arctan = BaseFunction(lambda x: np.arctan(x.v), lambda x: x.d / (1 + x.v**2))
 
 # Hyperbolic functions
 # Note: can implement manually using natural exponential, but similarly to before
