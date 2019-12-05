@@ -68,4 +68,5 @@ def test_nodify_nested_list():
 def test_recursive_append():
     x=Node(1,1)
     x.parents = [Node(2,1)]
-    assert recursive_append(x,[])==[Node(1,1),Node(2,1)]
+    assert recursive_append(x,[])==[Node(1,1),Node(1,1),Node(2,1)]
+    
