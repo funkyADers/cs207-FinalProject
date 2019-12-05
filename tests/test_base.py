@@ -1,21 +1,19 @@
 import pytest
 from funkyAD.base import AD, grad, Node
-from funkyAD.functions import exp 
+from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
 
 # to do:
-#  raise typeerror fo string nodes
-#  raise value error for int seeds
-#  update example in header to output ndarray [[1]]
+# deal with int, float, long 
+# test new methods 
 
 # test AD class
+def test_noncallable_f():
+    with pytest.raises(TypeError):
+        AD(5*5)
+
 def test_AD_string_input():
     with pytest.raises(TypeError):
         AD('hello').grad(1) 
-
-def test_non_callable_constant_f():
-    adobj = AD(2) 
-    with pytest.raises(TypeError): 
-        adobj.grad(2)==[[2]]
 
 def test_constant_function(): 
     adobj = AD(lambda x: 4)
@@ -35,6 +33,43 @@ def test_grad():
     def f(x): 
         return x**2 
     assert AD(f).grad(2)==[[4]]
+
+def test_trace():
+    adobj = AD(lambda x,y: x+y)
+    trace = adobj._buildtrace(1,2)
+    assert len(trace)==3 
+
+def test_trace_1dim():
+    adobj = AD(lambda x: 3)
+    trace = adobj._buildtrace(2)
+    assert len(trace)==1
+
+def test_reverse():
+    def f(x):
+        return x**2
+    assert AD(f)._reverse(2)==[[4]]
+
+def test_reverse_multidim_n():
+    adobj = AD(lambda x,y: x**2+2*y)
+    truth = [[4, 2]]
+    assert (adobj._reverse(2,1) == truth).all()
+
+def test_reverse_multidim_n():
+    adobj = AD(lambda x,y: x**2+2*y)
+    truth = [[4, 2]]
+    assert (adobj._reverse(2,1) == truth).all()
+
+def test_reverse_multidim_m(): 
+    adobj = AD(lambda x,y: [x+y, x**2])
+    grad = adobj._reverse(1,1)
+    truth = [[1,1],[2,0]]
+    assert (grad == truth).all()
+
+def test_reverse_noinfl_in():
+    adobj = AD(lambda x,y: x**2 + x)
+    grad = adobj._reverse(1,1) 
+    truth = [[3,0]]
+    assert (grad == truth).all()
 
 def test_set_seed():
     adobj = AD(lambda x: x+5)
@@ -82,6 +117,7 @@ def test_self_m():
     adobj._forward(0,0)
     assert adobj.m == 1
 
+
 # test Node class - overload tests in test-functions.py 
 def test_node_nonnumeric_values():
     with pytest.raises(TypeError):
@@ -104,14 +140,56 @@ def test_radd():
 def test_rmult():
     assert 2*Node(2,2) == Node(4,4)
 
+def test_rpow():
+    with pytest.raises(NotImplementedError):
+        2**Node(2,3)
+
+def test_sub():
+    assert Node(1,2)-2 == Node(-1, 2) 
+
 def test_rsub():
     assert 2-Node(1,2) == Node(1, -2)
+
+def test_pos():
+    print(+Node(-1,-2))
+    assert +(Node(-1,-2)) == Node(-1,-2)
+
+def test_neg():
+    assert -(Node(1,2)) == Node(-1, -2)
 
 def test_rfloordiv():
     assert 8 //  Node(3, 3) == Node(2, 0)
 
 def test_abs():
     assert abs(Node(-1, 1)) == Node(1, -1)
+
+# invert is not differentiable 
+def test_invert():
+    with pytest.raises(ValueError):
+        ~(Node(2, 0)) 
+
+def test_round():
+    assert round(Node(2.2, 3.2),0) == Node(2, 0)
+    assert round(Node(2.2, 3.2), Node(0,0)) == Node(2, 0)
+
+def test_floor(): 
+    assert floor(Node(3.3, 3)) == Node(3,0)
+
+def test_ceil(): 
+    assert ceil(Node(3.3, 3)) == Node(4,0)
+
+def test_trunc():
+    assert trunc(Node(3.33, 3)) == Node (3,0)
+
+# catch complex input (must be a float)
+def test_complex_input():
+    with pytest.raises(TypeError):
+        Node(complex(3), 2)
+
+# catch vonersion to complex
+def test_complex():
+    with pytest.raises(NotImplementedError):
+        complex(Node(1,3))
 
 def test_ne():
     assert Node(2,3) != Node(3,2)
