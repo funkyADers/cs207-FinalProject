@@ -34,8 +34,10 @@ class BaseFunction():
 
 addition = BaseFunction(lambda x, y: x.v + y.v, lambda x, y: x.d + y.d)
 subtraction = BaseFunction(lambda x, y: x.v - y.v, lambda x, y: x.d - y.d)
+
 # Product rule
 multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x.v * y.d)
+
 # Quotient rule
 division = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
 
@@ -128,7 +130,6 @@ def exp2(x, b = np.e):
         return x.d * np.log(b) * b ** x.v
 
 exp = BaseFunction(exp1, exp2)
-#exp = BaseFunction(lambda x: np.exp(x.v), lambda x: x.d * np.exp(x.v))
 
 @base_check
 def log1(x, b = np.e):
@@ -140,7 +141,6 @@ def log2(x, b = np.e):
     return x.d / (x.v * np.log(b))
 
 log = BaseFunction(log1, log2)
-
 
 # Trigonometric functions
 sin = BaseFunction(lambda x: np.sin(x.v), lambda x: x.d * np.cos(x.v))
