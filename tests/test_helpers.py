@@ -23,7 +23,7 @@ def test_count_recursive_invalid_input():
 
 def test_unpack_1dlist():
     x = [1,2]
-    assert unpack(x) = [1,2]
+    assert unpack(x) == [1,2]
 
 def test_unpack_2darray():
     x = np.array([[1, 2, 3], [4, 5, 6]], np.int32)
