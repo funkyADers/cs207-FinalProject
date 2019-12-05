@@ -102,12 +102,10 @@ class AD():
 
         trace = []
 
-        # Nodify (not sure if this step is actually necessary)
-        if hasattr(type(out), '__len__'):
-            for a in out:
-                recursive_append(a, trace)
-        else:
-            recursive_append(out, trace)
+        # Nodify 
+        # self._forward will always return an np.array 
+        for a in out:
+            recursive_append(a, trace)
 
         self.trace = trace
         return trace
@@ -132,16 +130,18 @@ class AD():
                     p.d = 0.0
 
         # Unpack input Node objects in case they are contained in an array or similar
+        # _reverse calls _buildtrace which calls forward which calls nodify that already 
+        # unpacks self so we don't need to do the ifelse 
         new_input = []
         for var in self.input_nodes:
-            if hasattr(type(var), '__len__'):
-                new_input += [x for x in var]
-            else:
-                new_input.append(var)
+            #if hasattr(type(var), '__len__'):
+            #    new_input += [x for x in var]
+            #else:
+            new_input.append(var)
 
         for n in new_input:
             # If input node does not influence the output, its gradient has to be
-            #  manually set to ahve the correct size
+            #  manually set to have the correct size
             try:
                 if n.back_g == 0:
                     n.back_g = np.zeros(len(self.output_nodes))
@@ -189,16 +189,6 @@ class Node():
         return multiplication(self, other)
     def __rmul__(self, other):
         return multiplication(self, other)
-
-    def __iadd__(self,other):
-        raise NotImplementedError()
-    def __isub__(self,other):
-        raise NotImplementedError()
-    def __imul__(self,other):
-        raise NotImplementedError()
-    def __idiv__(self,other):
-        raise NotImplementedError()
-
     def __pow__(self, other):
         return power(self, other)
     def __rpow__(self, other):
