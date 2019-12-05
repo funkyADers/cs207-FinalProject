@@ -1,14 +1,12 @@
 import numpy as np
-#from base import Node
 
 def count_recursive(args):
     '''Counts the number of arguments by recursing over np.arrays and lists'''
     #deferred import to work around circular dependency
     from .base import Node
     if isinstance(args, (np.ndarray, list, tuple)):
-    
         pass
-    elif isinstance(args, (int, float,Node)):
+    elif isinstance(args, (int, float, Node, np.int64)):
         return 1
     else:
         raise TypeError('The input argument should be either np.arrays or list')
@@ -87,4 +85,11 @@ def nodify(args, seed):
         else:
             new_args.append(agument(a))
     return new_args
-   
+
+def recursive_append(n, trace):
+    # appends a node and all its parents to trace by recursing
+    trace.append(n)
+    if n.parents is not None:
+        for p in n.parents:
+            recursive_append(p, trace)
+

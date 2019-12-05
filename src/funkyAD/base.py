@@ -1,7 +1,6 @@
 import numpy as np
-from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
-from .helpers import count_recursive, nodify, unpack
+from .functions import addition, multiplication, division, power, pos, neg, _abs, invert, floordiv, _round, floor, ceil, trunc
+from .helpers import count_recursive, nodify, unpack, recursive_append
 
 class AD():
     '''Wraps a function to access Automatic Differentiation methods.
@@ -23,39 +22,51 @@ class AD():
     >>> def f(x):
             return exp(x)
     >>> print(AD(f).grad(0))
-    1
+    [[1]]
     '''
 
     def __init__(self, f):
+        try:
+            callable(f)
+        except: 
+            raise TypeError('The input function to AD must be callable')
         self.f = f
         self.seed = None
         self.n = None
         self.m = None
+        self.trace = None
 
     def grad(self, *args):
         '''Returns the gradient of the function evaluated on the arguments given'''
-        out_nodes = self._evaluate(*args)
+        out_nodes = self._forward(*args)
         return np.array([node.d for node in unpack(out_nodes)])
 
     def set_seed(self, seed):
         '''Sets a matrix of seed vectors for the forward mode pass.
         If n inputs and m outputs are given, seed argument must have (n, m) shape.
         '''
-        self.seed = seed
+        try:
+            self.seed = np.asarray(seed,dtype=np.float32)
+        except: 
+            raise ValueError("Seed input must be an array with numeric elements")
 
     def _check_seed(self, l):
         '''Checks if provided seed has appropriate dimension'''
         if len(self.seed) != l:
             raise ValueError("Seed dimension does not match input dimension")
 
-    def _evaluate(self, *args):
+    def _forward(self, *args):
         '''Main algorithm for the forward pass. Calls helpers as appropriate.'''
 
         # Compute number of inputs
         self.n = count_recursive(args)
 
-        # Try evaluate the function
-        output = self.f(*args)
+        # Try to evaluate the function
+        try:
+            output = self.f(*args)
+        except:
+            raise TypeError('function and *args are not callable') 
+            
         # Compute numer of outputs
         self.m = count_recursive(output)
 
@@ -69,13 +80,78 @@ class AD():
 
         # Make all arguments Node objects
         new_args = nodify(args, self.seed)
+        self.input_nodes = new_args
 
         if default_seed:
             # If we assigned a default seed, remove it
             self.seed = None
 
-        return self.f(*new_args)
+        # Replace constants in the output with Node objects
+        out = self.f(*new_args)
+        if hasattr(type(out), '__len__'):
+            self.output_nodes = np.array([a if isinstance(a, Node) else Node(a) for a in out])
+        else:
+            self.output_nodes = np.array([out]) if isinstance(out, Node) else np.array([Node(out)])
+        return self.output_nodes
 
+    def _buildtrace(self, *args):
+        
+        # Store previous seed in a temp value, set seed to 0
+        temp, self.seed = self.seed, [0 for _ in range(count_recursive(args))]
+        out = self._forward(*args)
+        # Put it back
+        self.seed = temp
+
+        trace = []
+
+        # Nodify (not sure if this step is actually necessary)
+        if hasattr(type(out), '__len__'):
+            for a in out:
+                recursive_append(a, trace)
+        else:
+            recursive_append(out, trace)
+
+        self.trace = trace
+        return trace
+
+    def _reverse(self, *args):
+
+        trace = self._buildtrace(*args)
+
+        # Set df/dx_n of the output to 1
+        self.back_seed = np.eye(len(self.output_nodes))
+        for i, n in enumerate(self.output_nodes):
+            n.back_g = self.back_seed[i]
+
+        for n in trace:
+            if n.parents:
+                for p in n.parents:
+                    # Set derivative of that node to 1
+                    p.d = 1.0
+                    # Increase the gradient of the parent
+                    p.back_g += n.back_g * n.f.d(*n.parents)
+                    # Put it back so other nodes' computations are not affected
+                    p.d = 0.0
+
+        # Unpack input Node objects in case they are contained in an array or similar
+        new_input = []
+        for var in self.input_nodes:
+            if hasattr(type(var), '__len__'):
+                new_input += [x for x in var]
+            else:
+                new_input.append(var)
+
+        for n in new_input:
+            # If input node does not influence the output, its gradient has to be
+            #  manually set to ahve the correct size
+            try:
+                if n.back_g == 0:
+                    n.back_g = np.zeros(len(self.output_nodes))
+            except:
+                pass
+
+        # Return the transpose for (obvious?) mathematical reasons
+        return np.array([x.back_g for x in new_input]).T
 
 class Node():
     '''Represents a Node in the evaluation graph. Holds its value and derivative. 
@@ -88,18 +164,20 @@ class Node():
     '''
 
     def __init__(self, v, d=0):
+        self.v = v
+        self.d = d # if derivative is none its assumed to be 0 (for constant node)
+
         # Verify that numeric
         try:
-            float(v)
-            float(d)
-        except ValueError:
+            np.asarray(self.v, dtype=np.float64)
+            np.asarray(self.d, dtype=np.float64)
+        except:
             raise TypeError('Value and derivative must be numeric.')
 
-        self.v = v
-        self.d = d # If derivative is None it's assumed to be 0 (for a constant node)
+        self.parents = None
+        self.f = None
+        self.back_g = 0 #Backprop gradient
 
-        #self.prev = []
-        #self.next = []
 
     def __add__(self, other):
         return addition(self, other)
@@ -122,9 +200,9 @@ class Node():
         return floordiv(self, other)
     def __rfloordiv__(self, other):
         return floordiv(other, self)
-    def __div__(self, other):
+    def __truediv__(self, other):
         return division(self, other)
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         return division(other, self)
 
     # TODO
@@ -139,6 +217,8 @@ class Node():
     def __invert__(self):
         return invert(self)
     def __round__(self, n):
+        if isinstance(n, Node):
+            return _round(self, n.v)
         return _round(self, n)
     def __floor__(self):
         return floor(self)
@@ -148,9 +228,10 @@ class Node():
         return trunc(self)
 
     def __eq__(self, other):
-        return self.v.__eq__(other.v)
+        return self.v.__eq__(other.v) and self.d.__eq__(other.d)
     def __ne__(self, other):
-        return self.v.__ne__(other.v)
+        return self.v.__ne__(other.v) or self.d.__ne__(other.d)
+
     def __lt__(self, other):
         return self.v.__lt__(other.v)
     def __gt__(self, other):
@@ -170,7 +251,8 @@ class Node():
         raise NotImplementedError("Complex numbers are not supported")
         
     def __str__(self):
-        return "Node object with value " + str(self.v) + " and derivative " + str(self.d)
+        return "Node object with value " + str(self.v) + " and derivative " + str(self.d) +\
+                " and back-gradient " + str(self.back_g)
 
     def __repr__(self):
         return "Node(" + str(self.v) + ", " + str(self.d) + ")"
@@ -187,15 +269,3 @@ def grad(f):
     [1, 1]
     '''
     return AD(f).grad
-
-
-"""
-# Import statement has to be at the bottom for some reason
-from funkyAD.functions import addition, multiplication, division, power, pos, neg, _abs, invert, \
-                        floordiv, _round, floor, ceil, trunc
-from funkyAD.helpers import count_recursive, nodify, unpack
-"""
-
-if __name__ == "__main__":
-    print(Node(4, 5))
-    print(AD(lambda x: x ** 2))
