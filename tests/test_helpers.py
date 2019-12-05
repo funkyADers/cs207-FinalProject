@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from funkyAD.helpers import count_recursive, unpack, nodify
+from funkyAD.helpers import count_recursive, unpack, nodify, recursive_append
 from funkyAD.base import Node
 
 
@@ -50,3 +50,25 @@ def test_nodify_list():
 def test_nodify_invalid_input():
     with pytest.raises(TypeError):
         nodify(3.14)
+
+def test_nodify_text_input():
+    with pytest.raises(TypeError):
+        nodify("test")
+
+def test_nodify_ndarray():
+    x=np.array([np.array([1])])
+    seed = [1]
+    assert nodify(x,seed)==[Node(1,1)]
+
+def test_nodify_nested_list():
+    x=[[1,2],[3,4]]
+    seed = [1,2,3,4]
+    assert nodify(x,seed)==[[Node(1,1), Node(2,2)], [Node(3,3), Node(4,4)]]
+
+def test_recursive_append():
+    x=Node(1,1)
+    x.parents = [Node(2,1)]
+    trace = []
+    recursive_append(x,trace)
+    assert trace == [Node(1,1),Node(2,1)]
+    
