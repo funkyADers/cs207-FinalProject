@@ -20,7 +20,11 @@ def test_count_recursive_invalid_input():
     x = "text"
     with pytest.raises(TypeError):
         count_recursive(x)
-        
+
+def test_unpack_1dlist():
+    x = [1,2]
+    assert unpack(x) = [1,2]
+
 def test_unpack_2darray():
     x = np.array([[1, 2, 3], [4, 5, 6]], np.int32)
     assert unpack(x)==[1,2,3,4,5,6]
@@ -52,8 +56,14 @@ def test_nodify_invalid_input():
         nodify(3.14)
 
 def test_nodify_text_input():
+    x = "test"
     with pytest.raises(TypeError):
-        nodify("test")
+        nodify(x)
+
+def test_nodify_node_input():
+    x = Node(1,[1,1])
+    with pytest.raises(TypeError):
+        nodify(x)
 
 def test_nodify_ndarray():
     x=np.array([np.array([1])])
