@@ -57,13 +57,15 @@ def test_nodify_invalid_input():
 
 def test_nodify_text_input():
     x = "test"
+    seed = [1,0,0]
     with pytest.raises(TypeError):
-        nodify(x)
+        nodify(x, seed)
 
 def test_nodify_node_input():
     x = Node(1,[1,1])
+    seed = [1,0]
     with pytest.raises(TypeError):
-        nodify(x)
+        nodify(x,seed)
 
 def test_nodify_ndarray():
     x=np.array([np.array([1])])
