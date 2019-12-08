@@ -33,11 +33,24 @@ class AD():
         self.n = None
         self.m = None
         self.trace = None
+        self.mode = 'forward'
+
+    def set_mode(self, mode):
+        if mode not in ('forward','reverse'):
+            raise ValueError('Invalid mode = Only "forward" and "reverse" mode are supported')
+        else:
+            self.mode = mode
 
     def grad(self, *args):
         '''Returns the gradient of the function evaluated on the arguments given'''
-        out_nodes = self._forward(*args)
-        return np.array([node.d for node in unpack(out_nodes)])
+        if self.mode not in ('forward','reverse'):
+            raise ValueError('Invalid mode = Only "forward" and "reverse" mode are supported')
+        if self.mode=='forward':
+            out_nodes = self._forward(*args)
+            return np.array([node.d for node in unpack(out_nodes)])
+        elif self.mode == 'reverse':
+            out_nodes = self._reverse(*args)
+            return out_nodes
 
     def set_seed(self, seed):
         '''Sets a matrix of seed vectors for the forward mode pass.
@@ -130,14 +143,12 @@ class AD():
                     p.d = 0.0
 
         # Unpack input Node objects in case they are contained in an array or similar
-        # _reverse calls _buildtrace which calls forward which calls nodify that already 
-        # unpacks self so we don't need to do the ifelse 
         new_input = []
         for var in self.input_nodes:
-            #if hasattr(type(var), '__len__'):
-            #    new_input += [x for x in var]
-            #else:
-            new_input.append(var)
+            if hasattr(type(var), '__len__'):
+                new_input += [x for x in var]
+            else:
+                new_input.append(var)
 
         for n in new_input:
             # If input node does not influence the output, its gradient has to be
