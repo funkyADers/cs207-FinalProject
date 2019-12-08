@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 from funkyAD.base import AD, grad, Node
 from funkyAD.functions import addition, multiplication, division, floordiv, power, sign, r_der, pos, neg, _abs, invert, _round, floor, ceil, trunc, exp, sin, cos, tan
 
@@ -71,6 +72,35 @@ def test_reverse_noinfl_in():
     truth = [[3,0]]
     assert (grad == truth).all()
 
+def test_set_mode():
+    adobj = AD(lambda x,y: x+y)
+    adobj.set_mode('reverse')
+    assert adobj.mode=='reverse'
+
+def test_set_incorrect_set_mode():
+    adobj = AD(lambda x,y: x+y)
+    with pytest.raises(ValueError):
+        adobj.set_mode('backprop')
+
+def test_set_incorrect_mode():
+    adobj = AD(lambda x,y: x+y)
+    adobj.mode = 'backprop'
+    with pytest.raises(ValueError):
+        adobj.grad(1,2)
+
+def test_grad_reverse():
+    def f(x):
+        return x**2
+    adobj = AD(f)
+    adobj.set_mode('reverse')
+    assert adobj.grad(2)==[[4]]
+
+def test_grad_reverse_multidim_n():
+    adobj = AD(lambda x,y: x**2+2*y)
+    adobj.set_mode('reverse')
+    truth = [[4, 2]]
+    assert (adobj.grad(2,1) == truth).all()
+
 def test_set_seed():
     adobj = AD(lambda x: x+5)
     adobj.set_seed(5)
@@ -117,6 +147,13 @@ def test_self_m():
     adobj._forward(0,0)
     assert adobj.m == 1
 
+def test_sum():
+    def myfunc(a):
+        return a.sum()
+    adobj = AD(myfunc)
+    inp = np.array([n for n in range(5)])
+    truth = [[1, 1, 1, 1, 1]]
+    assert (adobj._reverse(inp) == truth).all()
 
 # test Node class - overload tests in test-functions.py 
 def test_node_nonnumeric_values():
