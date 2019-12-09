@@ -237,12 +237,20 @@ class Node():
         return self.v.__ne__(other.v) or self.d.__ne__(other.d)
 
     def __lt__(self, other):
+        if self.v.__eq__(other.v):
+            raise ValueError("Comparison not differentiable")
         return self.v.__lt__(other.v)
     def __gt__(self, other):
+        if self.v.__eq__(other.v):
+            raise ValueError("Comparison not differentiable")
         return self.v.__gt__(other.v)
     def __le__(self, other):
+        if self.v.__eq__(other.v):
+            raise ValueError("Comparison not differentiable")
         return self.v.__le__(other.v)
     def __ge__(self, other):
+        if self.v.__eq__(other.v):
+            raise ValueError("Comparison not differentiable")
         return self.v.__ge__(other.v)
     def __complex__(self):
         raise NotImplementedError("Complex numbers are not supported")

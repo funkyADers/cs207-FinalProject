@@ -232,7 +232,7 @@ def test_ne():
     assert Node(2,3) != Node(3,2)
 
 def test_lt():
-    assert Node(2,0) <= Node(2,0)
+    assert Node(2,0) <= Node(3,0)
 
 def test_gt():
     assert Node(3,0) >= Node(1,0)
