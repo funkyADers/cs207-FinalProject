@@ -41,7 +41,10 @@ multiplication = BaseFunction(lambda x, y: x.v * y.v, lambda x, y: x.d * y.v + x
 # Quotient rule
 division = BaseFunction(lambda x, y: x.v / y.v, lambda x, y: (y.v * x.d - x.v * y.d) / (y.v ** 2))
 
-power = BaseFunction(lambda x, n: x.v ** n.v, lambda x, n: n.v * (x.v ** (n.v - 1)) * x.d)
+# Generalized Power Rule
+power = BaseFunction(lambda x, y: x.v ** y.v,
+                     lambda x, y: (x.v ** y.v) * (x.d * y.v / x.v + y.d * np.log(x.v)) )
+
 sqrt = BaseFunction(lambda x: x.v**0.5, lambda x: x.d / (2*x.v**0.5))
 
 pos = BaseFunction(lambda x: +x.v, lambda x: +x.d)
