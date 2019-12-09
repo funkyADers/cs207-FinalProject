@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="funkyAD-funkyADers", 
-    version="0.0.5",
+    version="0.0.6",
     author="Anna Zink, Johannes K. Kolberg, Fabio Pruneri, Tyler Yoo",
     author_email="",
     description="An implementation of Auto Differentiaion",
