@@ -80,11 +80,11 @@ def test_floordivision():
 def test_power():
     # Two nodes via function call
     ## 3*(2**2)*2
-    assert power(Node(2, 2), Node(3, 3)) == Node(8, 24)
+    assert power(Node(2, 2), Node(3, 3)) == Node(8, 40.63553233343869)
     # Node and constant
     assert power(Node(2, 2), 3) == Node(8, 24)
     # Two nodes via overload
-    assert Node(2, 2) ** Node(3, 3) == Node(8, 24)
+    assert Node(2, 2) ** Node(3, 3) == Node(8, 40.63553233343869)
     # Two constants via function call
     assert power(4, 2) == Node(16, 0)
     # Node and constant
